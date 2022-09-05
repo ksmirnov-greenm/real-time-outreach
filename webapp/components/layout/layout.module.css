@@ -1,0 +1,21 @@
+.header {
+    width: 1440px;
+    height: 70px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(18, 28, 45, 0.1);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 27px;
+    position: relative;
+}
+
+.main {
+    display: flex;
+    height: calc(100vh - 64px);
+    background-color: white;
+}
+
+.main > section {
+    padding: 32px;
+}

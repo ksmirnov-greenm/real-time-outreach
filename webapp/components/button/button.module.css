@@ -1,0 +1,33 @@
+.button {
+    width: 155px;
+    height: 37px;
+    background: #EBF4FF;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    color: #0263E0;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:disabled {
+    background: #F4F4F6;
+    color: #AEB2C1;
+    cursor: not-allowed;
+    pointer-events: all !important;
+}
+
+.button:disabled svg{
+    fill: #AEB2C1;
+}
+.button:disabled svg path{
+    fill: #AEB2C1;
+}
+
+.button svg{
+    margin-right: 5px;
+}

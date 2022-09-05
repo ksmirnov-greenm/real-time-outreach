@@ -1,0 +1,71 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 178px;
+    margin-top: 32px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+.title {
+    /*font-family: 'Inter', sans-serif;
+    font-style: normal;*/
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 44px;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #121C2D;
+    margin-left: 22px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #CACDD8;
+    margin-left: 28px;
+    padding-left: 50px;
+}
+
+.note {
+    /*font-family: 'Inter', sans-serif;
+    font-style: normal;*/
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #606B85;
+    margin-top: -8px;
+    margin-bottom: 8px;
+}
+
+.disabled {
+    color: #AEB2C1;
+}
+
+.listtitle {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    color: #121C2D;
+    margin-top: 16px;
+    margin-bottom: 9px;
+}
+
+.filename {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #121C2D;
+    /*
+    margin-bottom: 14px;
+    */
+    display: inline-flex;
+    align-items: center;
+}
+
+.filename input[type="checkbox"] {
+    margin-right: 9px;
+}
