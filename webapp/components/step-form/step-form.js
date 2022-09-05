@@ -32,6 +32,7 @@ const StepForm = () => {
 			setSelectedSurvey('');
 		} else {
 			setSelectedSurvey(name);
+			setCurrentStep(3);
 		}
 	}
 	
@@ -40,6 +41,20 @@ const StepForm = () => {
 		getPatientLists()
 			.then(res => console.log('res', res))
 	}, [])
+	
+	useEffect(() => {
+		console.log('selected list', selectedList);
+		
+		if(selectedList) {
+			if(selectedSurvey) {
+				setCurrentStep(3);
+			} else {
+				setCurrentStep(2);
+			}
+		} else {
+			setCurrentStep(1);
+		}
+	}, [selectedList, selectedSurvey]);
 	
 	
 	const uploadPatientList = (e) => {
@@ -58,7 +73,6 @@ const StepForm = () => {
 	
 	const patientListNames = Object.keys(patientListCollection);
 	const surveyNames = Object.keys(surveyCollection);
-	console.log('patientListNames', patientListNames, surveyNames);
 	
 	return <div className={styles.container}>
 		<StepContainer
