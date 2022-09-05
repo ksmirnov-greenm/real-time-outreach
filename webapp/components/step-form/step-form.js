@@ -6,14 +6,20 @@ import Button from "../button/button";
 import FileUploader from "../file-uploader/file-uploader";
 import {getPatientLists} from "../../services/api-service";
 import {v4 as uuidV4} from 'uuid';
+import DatePicker from "react-datepicker";
+/*import 'react-clock/dist/Clock.css';
+import 'react-time-picker/dist/TimePicker.css';*/
+import TimePicker from 'react-time-picker/dist/entry.nostyle';
 
 const StepForm = () => {
 	
 	const [currentStep, setCurrentStep] = useState(1);
-	
 	const [patientListCollection, setPatientListCollection] = useState({});
-	
 	const [selectedList, setSelectedList] = useState('');
+	const [surveyCollection, setSurveyCollection] = useState({});
+	const [selectedSurvey, setSelectedSurvey] = useState('');
+	// const [timeValue, setTimeValue] = useState(new Date());
+	const [selectedDate, setSelectedDate] = useState(new Date());
 	
 	const selectCurrentList = (name) => {
 		if(selectedList === name) {
@@ -22,10 +28,6 @@ const StepForm = () => {
 			setSelectedList(name);
 		}
 	}
-	
-	const [surveyCollection, setSurveyCollection] = useState({});
-	
-	const [selectedSurvey, setSelectedSurvey] = useState('');
 	
 	const selectCurrentSurvey = (name) => {
 		if(selectedSurvey === name) {
@@ -36,6 +38,15 @@ const StepForm = () => {
 		}
 	}
 	
+	const submit = () => {
+		const data = {
+			patients: selectedList,
+			survey: selectedSurvey,
+			date: selectedDate
+		}
+		console.log('submit data: ', data);
+		
+	}
 	
 	useEffect(() => {
 		getPatientLists()
@@ -43,8 +54,6 @@ const StepForm = () => {
 	}, [])
 	
 	useEffect(() => {
-		console.log('selected list', selectedList);
-		
 		if(selectedList) {
 			if(selectedSurvey) {
 				setCurrentStep(3);
@@ -144,9 +153,23 @@ const StepForm = () => {
 			title="Select dates"
 			note="Select date and time we should send surveys"
 		>
+			<div className={styles.timecontainer}>
+				<DatePicker
+					selected={selectedDate}
+					onChange={(date) => setSelectedDate(date)}
+					disabled={currentStep < 3}
+				/>
+
+				{/*<TimePicker
+					onChange={setTimeValue}
+					value={timeValue}
+				/>*/}
+
+			</div>
+			
 			<Button
 				disabled={currentStep < 3}
-				click={() => console.log('click 3')}
+				click={submit}
 				fill={'#0263E0'}
 			>
 				<>

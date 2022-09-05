@@ -69,3 +69,10 @@
 .filename input[type="checkbox"] {
     margin-right: 9px;
 }
+
+.timecontainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}

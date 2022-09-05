@@ -8,8 +8,8 @@
     "deploy": "twilio-run deploy"
   },
   "dependencies": {
-    "twilio": "^3.56",
-    "@twilio/runtime-handler": "1.2.3"
+    "@twilio/runtime-handler": "1.2.3",
+    "twilio": "^3.56"
   },
   "devDependencies": {
     "twilio-run": "^3.4.2"
