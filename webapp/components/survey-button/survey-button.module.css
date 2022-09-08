@@ -1,0 +1,77 @@
+.survey-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 8px;
+    width: 241px;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 8px;
+}
+
+.icon-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /*padding: 6px;*/
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+}
+
+.positive {
+    background: #EDFDF3;
+    color: #14B053;
+}
+
+.positive .icon-block {
+    background: #14B053;
+}
+
+
+.positive .icon-block svg path {
+    fill: #EDFDF3;
+}
+
+.positive.selected {
+    background: #14B053;
+    color: #EDFDF3;
+}
+
+.positive.selected .icon-block {
+    background: #EDFDF3;
+}
+
+.positive.selected .icon-block svg path {
+    fill: #14B053;
+}
+
+.negative {
+    background: #FEECEC;
+    color: #D61F1F;
+}
+
+.negative .icon-block {
+    background: #D61F1F;
+}
+
+.negative .icon-block svg path {
+    fill: #FEECEC;
+}
+
+.negative.selected .icon-block {
+    background: #FEECEC;
+}
+
+.negative.selected .icon-block svg path {
+    fill: #D61F1F;
+}
+
+.negative.selected {
+    background: #D61F1F;
+    color: #FEECEC;
+}
+

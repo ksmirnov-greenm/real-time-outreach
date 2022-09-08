@@ -1,0 +1,79 @@
+.footer {
+    position: absolute;
+    width: 100%;/*1440px;*/
+    bottom: 0;
+    height: 59px;
+    display: flex;
+    background: #F4F4F6;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer svg {
+    margin-top: 5px;
+}
+
+.footer .left {
+    margin-left: 127px;
+    display: flex;
+    align-items: center;
+}
+
+.footer .chat {
+    margin-right: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.footer button {
+    background: #0263E0;
+    border-radius: 38px;
+    color: #fff;
+}
+
+.footer .name {
+    color: #606B85;
+    display: inline-flex;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    margin-right: 30px;
+}
+.footer .text {
+    font-weight: 500;
+    font-size: 14px;
+    color: #606B85;
+    margin-right: 12px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+}
+
+.footer .link {
+    color: #606B85;
+    display: inline-flex;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    padding: 2px 1px 0;
+    border-bottom: 1px solid;
+    text-decoration-line: none;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    margin-left: 24px;
+}
+.footer a:visited {
+    color: #606B85;
+}
+
+.footer a:focus {
+    color: #606B85;
+}
+
+.footer a:hover {
+    color: #606B85;
+}
+
+.footer a:active {
+    color: #606B85;
+}

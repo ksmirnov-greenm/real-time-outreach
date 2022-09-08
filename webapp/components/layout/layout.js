@@ -3,6 +3,7 @@ import styles from './layout.module.css';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import ActiveLink from "../active-link/active-link";
+import {Footer} from "../footer/footer";
 
 export default function Layout({ children }) {
 	
@@ -33,7 +34,7 @@ export default function Layout({ children }) {
 					</defs>
 				</svg>
 				</Link>
-				<ActiveLink href="/survey">
+				<ActiveLink href="/survey-settings">
 					Survey Settings
 				</ActiveLink>
 				<ActiveLink href="/dashboard">
@@ -41,6 +42,7 @@ export default function Layout({ children }) {
 				</ActiveLink>
 			</div>
 			<main className={styles.main}>{children}</main>
+			<Footer/>
 		</>
 	)
 }

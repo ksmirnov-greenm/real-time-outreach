@@ -1,13 +1,16 @@
 .header {
-    width: 1440px;
+    width: 100%;/*1440px;*/
     height: 70px;
     background: #FFFFFF;
     box-shadow: 0 2px 4px rgba(18, 28, 45, 0.1);
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding-left: 27px;
+    /*padding-left: 27px;*/
     position: relative;
+}
+.header svg {
+    margin-left: 27px;
 }
 
 .main {
