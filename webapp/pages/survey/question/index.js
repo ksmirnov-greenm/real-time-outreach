@@ -4,12 +4,15 @@ import SurveyButton from "../../../components/survey-button/survey-button";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {getPatientSurvey} from "../../../services/api-service";
+import surveyService from "../../../services/surveyService";
+
 
 export default function Index () {
 	
 	const [title, setTitle] = useState('');
 	const [questions, setQuestions] = useState([]);
 	const [questionIndex, setQuestionIndex] = useState(0);
+	const [patientId, setPatientId] = useState('');
 	
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [currentAnswer, setCurrentAnswer] = useState(undefined);
@@ -27,21 +30,25 @@ export default function Index () {
 		
 		if(questions.length > newIndex) {
 			setQuestionIndex(newIndex);
+			//TODO: segment track answer
 			setSelectedQuestion(questions[newIndex])
 		} else {
 			console.log('submit', newAnswers);
+			//TODO: segment track complete
 			void router.push('/survey/completed');
 		}
 	}
 	
 	useEffect(() => {
 		if(runId) {
-			getPatientSurvey(runId)
+			surveyService.getPatientSurveyByRunId(runId)
 				.then(res => {
-						setTitle(res.title);
-						if(res.item.length) {
-							setQuestions(res.item);
-							setSelectedQuestion(res.item[questionIndex]);
+						const survey = res.survey;
+						setPatientId(res.patientId);
+						setTitle(survey.title);
+						if(survey.item.length) {
+							setQuestions(survey.item);
+							setSelectedQuestion(survey.item[questionIndex]);
 						}
 				})
 		}

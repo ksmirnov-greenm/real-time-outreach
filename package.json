@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@twilio/runtime-handler": "1.2.3",
+    "analytics-node": "^6.2.0",
     "twilio": "^3.56"
   },
   "devDependencies": {
