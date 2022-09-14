@@ -6,7 +6,6 @@ const FileUploader = ({change, disabled, children, name}) => {
 			type="file"
 			onChange={change}
 			id={name}
-			accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
 		/>}
 		
 		<svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">

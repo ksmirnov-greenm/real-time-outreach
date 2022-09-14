@@ -39,7 +39,7 @@ function removeFromStorage<T>(keys: string | string[], def?: T): Promise<void> {
             return Promise.resolve();
         } catch (e) {
             console.log("Failed to Remove Key from localStorage: ", e);
-            Promise.resolve(def);
+            void Promise.resolve(def);
         }
     }
 }
