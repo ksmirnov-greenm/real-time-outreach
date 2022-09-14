@@ -34,26 +34,50 @@ exports.handler = async function (context, event, callback) {
     console.log(listDocuments);
     console.log(event);
     const client = context.getTwilioClient();
-
+    
 
     switch (event.action) {
       case 'SCHEDULE': {
-        //TODO: schedule message
-        response.setBody({});
+        const msgBody = {runId:event.data.runId,method:'sms'};
+        const res = await client.messages
+        .create({
+           messagingServiceSid: 'MG96f1183aa1a79d72f1dd9005fef6be43', //TODO: use from config
+           body: JSON.stringify(msgBody),
+           sendAt: '2022-09-12T22:30:08+0000', //TODO: set from event
+           scheduleType: 'fixed',
+           // statusCallback: 'https://webhook.site/xxxxx', //TODO: probably use it to track status of message
+           to: '+19853797489' //TODO: set from config
+         });
+         console.log(res);        
+        response.setBody(res);
+
+        analytics.track({
+          userId: event.data.patientId,
+          event: 'Survey sms outreach scheduled',
+          properties: {
+            surveyId: event.data.surveyId,
+            outreachMethod: 'sms'
+          }
+        });
+
+        await analytics.flush(function (err, batch) {
+          console.log('Flushed, and now this program can exit!');
+        });
+        
+
         response.setStatusCode(200);
         return callback(null, response);
       }
       case 'TRIGGER': {
-    
         //TODO: set flow sid from config
         await client.studio.flows('FWf5164031e7b7727c75c12b24b90c0c5b')
           .executions
           .create({
-            to: event.data.patient.patientPhone,
+            to: event.data.patientPhone,
             from: '+17087667625', //todo: set phone from config
             parameters: {
               //TODO: use url from config
-              survey_link: 'https://real-time-outreach-2951-dev.twil.io/survey?runId=' + event.data.runId,
+              survey_link: 'https://' + context.DOMAIN_NAME + '/survey.html?runId=' + event.data.runId,
               run_id: event.data.runId //needs to add event to segment after sms
             }
           });
@@ -61,10 +85,10 @@ exports.handler = async function (context, event, callback) {
         
 
         analytics.track({
-          userId: event.data.patient.patientId,
+          userId: event.data.patientId,
           event: 'Survey sms outreach attempt',
           properties: {
-            surveyId: event.data.survey.id,
+            surveyId: event.data.surveyId,
             outreachMethod: 'sms'
           }
         });
@@ -91,14 +115,16 @@ exports.handler = async function (context, event, callback) {
               //TODO: need more info?
               fistName: patient.patientFirstName,
               lastName: patient.patientLastName,
-              phone: patient.patient_phone
+              phone: patient.patientPhone
             }
           });
 
+          //TODO: need more info for further analytics?
           return {
             runId: create_UUID(),
             patientId: patient.patientId,
-            surveyId: surveyDocument.data.survey.id
+            surveyId: surveyDocument.data.survey.id,
+            patientPhone: patient.patientPhone
           }
         });
 

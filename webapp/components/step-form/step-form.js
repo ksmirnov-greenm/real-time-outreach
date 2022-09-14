@@ -55,17 +55,18 @@ const StepForm = () => {
 
 		//1. save queue to storage
 		const queue = await surveyService.setSurveyPatientListQueue(data);
-		//limit of twilio function is 10 sec, so we have to trigger studio flows here
-		//2. if runs are not scheduled - trigger it
+		//limit of twilio function is 10 sec, so we have to trigger/schedule here
 		const patientListDocument = patientListCollection.find(d => d.sid === selectedPatientListSid);
 		const surveyDocument = surveyCollection.find(d => d.sid === selectedSurveySid);
-		console.log(patientListCollection);
-		console.log(selectedPatientListSid);
 		//async requests
 		const responses = await Promise.all(
 			queue.map(async run => {
 				const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
-				await surveyService.triggerStudioFlow({runId: run.runId, patient, survey: surveyDocument.data.survey});
+				//TODO: add actual logic here
+				//if(send Immediately)
+				//await surveyService.triggerStudioFlow(run);
+				//else if (schedule outreach)
+				await surveyService.scheduleMessage(run);
 			})
 		);
 

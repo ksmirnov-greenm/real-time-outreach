@@ -53,9 +53,22 @@ async function triggerStudioFlow(data: any): Promise<Array<any>> {
 
 
 
+async function scheduleMessage(data: any): Promise<Array<any>> {
+  const result = await fetch(Uris.backendRoot + '/patient-survey', {
+    method: 'POST',
+    body: JSON.stringify({ action: 'SCHEDULE', data }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then((r) => r.json());
+
+  return Promise.resolve(result);
+}
 
 export default {
   setSurveyPatientListQueue,
   triggerStudioFlow,
-  getPatientSurveyByRunId
+  getPatientSurveyByRunId,
+  scheduleMessage
 };
