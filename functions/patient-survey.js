@@ -32,7 +32,7 @@ exports.handler = async function (context, event, callback) {
 
     const listDocuments = await fetchSyncDocuments(context, TWILIO_SYNC_SID);
     console.log(listDocuments);
-    console.log(event);
+    console.log('*****************event', event);
     const client = context.getTwilioClient();
     
 
@@ -105,6 +105,8 @@ exports.handler = async function (context, event, callback) {
 
       case 'CREATE': {
         const patientListDocument = listDocuments.find(d => d.sid === event.data.patientListSid);
+        console.log('*********patientListDocument', patientListDocument);
+        
         const surveyDocument = listDocuments.find(d => d.sid === event.data.surveySid);
         const queue = patientListDocument.data.patientList.map(patient => {
 

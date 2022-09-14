@@ -1,13 +1,10 @@
 import Head from 'next/head';
 import styles from './layout.module.css';
 import Link from "next/link";
-import {useRouter} from "next/router";
 import ActiveLink from "../active-link/active-link";
 import {Footer} from "../footer/footer";
 
 export default function Layout({ children }) {
-	
-	const router = useRouter();
 	
 	return (
 		<>

@@ -1,0 +1,29 @@
+.radio-group-container {
+    display: flex;
+    flex-direction: column;
+}
+.radio-item-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.radio-input {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(180deg, #0B59DA 0%, #0A4FC2 100%);
+    box-shadow: 0 1px 2px rgba(17, 55, 78, 0.12);
+}
+
+.radio-item-label {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 6px;
+    color: #121C2D;
+}
+.disabled {
+    color: #AEB2C1;
+}
