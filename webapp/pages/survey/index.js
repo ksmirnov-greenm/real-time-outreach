@@ -19,7 +19,7 @@ export default function Survey() {
 			<div className={styles.logo}>
 				<Logo color={"#FAFDFF"}/>
 			</div>
-			<div className={`${styles.text} ${styles.xl}`}>We'd love to know a bit more about your vision.</div>
+			<div className={`${styles.text} ${styles.xl}`}>We&apos;d love to know a bit more about your vision.</div>
 			<div className={`${styles.text} ${styles.md}`}>Results of your vision checkout survey will be used for effective provision of medical care</div>
 			
 			<div className={styles.buttonContainer}>

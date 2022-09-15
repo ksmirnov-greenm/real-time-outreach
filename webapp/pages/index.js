@@ -13,6 +13,10 @@ export default function Index() {
   const [selectedPatientListSid, setSelectedPatientListSid] = useState('');
   const [surveyCollection, setSurveyCollection] = useState([]);
   const [selectedSurveySid, setSelectedSurveySid] = useState('');
+  const [launchIsScheduled, setLaunchIsScheduled] = useState(false);
+  //TODO: create time picker
+  //for now it is +16min, due to twilio limits 15min-7days,
+  //TODO: ideally add limitation in pickers
   const [selectedInvokeType, setSelectedInvokeType] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [timeValue, setTimeValue] = useState(new Date());
@@ -91,13 +95,15 @@ export default function Index() {
     //2. if runs are not scheduled - trigger it
     const patientListDocument = patientListCollection.find(d => d.sid === selectedPatientListSid);
     const surveyDocument = surveyCollection.find(d => d.sid === selectedSurveySid);
-    console.log(patientListCollection);
-    console.log(selectedPatientListSid);
     //async requests
     const responses = await Promise.all(
       queue.map(async run => {
         const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
-        await surveyService.triggerStudioFlow({runId: run.runId, patient, survey: surveyDocument.data.survey});
+				if(launchIsScheduled) {
+          await surveyService.scheduleMessage(run, data.scheduleDate);
+        } else {
+          await surveyService.triggerStudioFlow(run);
+        }
       })
     );
     setProcessing(false);
@@ -122,12 +128,7 @@ export default function Index() {
     
   }, [])
   
-  useEffect(() => {
-    console.log('selectedDate: ', selectedDate, 'selected time: ', timeValue);
-    
-  }, [selectedDate, timeValue])
-  
-  return <div>
+  return <>
     <StepForm
       patientListCollection={patientListCollection}
       selectedPatientListSid={selectedPatientListSid}
@@ -140,12 +141,12 @@ export default function Index() {
       submit={submit}
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
+      launchIsScheduled={launchIsScheduled}
+      setLaunchIsScheduled={setLaunchIsScheduled}
       timeValue={timeValue}
       setTimeValue={setTimeValue}
-      selectedInvokeType={selectedInvokeType}
-      setSelectedInvokeType={setSelectedInvokeType}
     />
-  </div>
+  </>
 }
 
 Index.getLayout = function getLayout(page) {

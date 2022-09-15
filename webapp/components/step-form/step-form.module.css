@@ -3,6 +3,8 @@
     flex-direction: column;
     margin-left: 178px;
     margin-top: 32px;
+    margin-bottom: 32px;
+    overflow: scroll;
 }
 
 .header {

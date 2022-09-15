@@ -20,17 +20,17 @@ const StepForm = ({
   submit,
 	selectedDate,
 	setSelectedDate,
+	launchIsScheduled,
+	setLaunchIsScheduled,
 	timeValue,
 	setTimeValue,
-	selectedInvokeType,
-	setSelectedInvokeType
 }) => {
 
 	const [currentStep, setCurrentStep] = useState(1);
 	
 	const scheduleOptions = [
-		{ value: 'Send Immediately', label: 'Send Immediately' },
-		{ value: 'Schedule Outreach', label: 'Schedule Outreach' }
+		{ value: false, label: 'Send Immediately' },
+		{ value: true, label: 'Schedule Outreach' }
 	];
 
 	useEffect(() => {
@@ -44,7 +44,6 @@ const StepForm = ({
 			setCurrentStep(1);
 		}
 	}, [selectedPatientListSid, selectedSurveySid]);
-	
 	
 	return <div className={styles.container}>
 		<StepContainer
@@ -119,14 +118,14 @@ const StepForm = ({
 		>
 			<>
 				<RadioGroup
-					value={selectedInvokeType}
+					value={launchIsScheduled}
 					options={scheduleOptions}
-					onChange={setSelectedInvokeType}
+					onChange={(value) => setLaunchIsScheduled(value)}
 					name={'Schedule'}
 					disabled={currentStep < 3}
 				/>
 				
-				{selectedInvokeType === 'Schedule Outreach' && <div className={styles.timeContainer}>
+				{launchIsScheduled && <div className={styles.timeContainer}>
 						<DatePicker
 							selected={selectedDate}
 							onChange={(date) => setSelectedDate(date)}
@@ -141,7 +140,7 @@ const StepForm = ({
 					</div>}
 		
 					<Button
-						disabled={(currentStep) < 3 || selectedInvokeType === ''}
+						disabled={(currentStep) < 3}
 						click={submit}
 						fill={'#0263E0'}
 					>

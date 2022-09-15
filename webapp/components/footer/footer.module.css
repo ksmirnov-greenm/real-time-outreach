@@ -1,7 +1,7 @@
 .footer {
     /*position: absolute;*/
     width: 100%;/*1440px;*/
-    bottom: 0;
+    /*bottom: 0;*/
     height: 59px;
     display: flex;
     background: #F4F4F6;
