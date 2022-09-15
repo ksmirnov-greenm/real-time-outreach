@@ -4,6 +4,7 @@ import StepForm from "../components/step-form/step-form";
 import helperService from "../services/helperService";
 import datastoreService from "../services/datastoreService";
 import surveyService from "../services/surveyService";
+import ProgressOverlay from "../components/progress-overlay/progress-overlay";
 
 export default function Index() {
   
@@ -17,9 +18,10 @@ export default function Index() {
   //TODO: create time picker
   //for now it is +16min, due to twilio limits 15min-7days,
   //TODO: ideally add limitation in pickers
-  const [selectedInvokeType, setSelectedInvokeType] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [timeValue, setTimeValue] = useState(new Date());
+  const [requestCount, setRequestCount] = useState(0);
+  const [currentRequest, setCurrentRequest] = useState(0);
   
   const selectCurrentList = (sid) => {
     if (selectedPatientListSid === sid) {
@@ -83,6 +85,7 @@ export default function Index() {
   
   const submit = async () => {
     setProcessing(true);
+    
     const data = {
       patientListSid: selectedPatientListSid,
       surveySid: selectedSurveySid,
@@ -91,25 +94,38 @@ export default function Index() {
     
     //1. save queue to storage
     const queue = await surveyService.setSurveyPatientListQueue(data);
+    setRequestCount(queue.length);
     //limit of twilio function is 10 sec, so we have to trigger studio flows here
     //2. if runs are not scheduled - trigger it
     const patientListDocument = patientListCollection.find(d => d.sid === selectedPatientListSid);
     const surveyDocument = surveyCollection.find(d => d.sid === selectedSurveySid);
-    //async requests
-    const responses = await Promise.all(
-      queue.map(async run => {
-        const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
-				if(launchIsScheduled) {
-          await surveyService.scheduleMessage(run, data.scheduleDate);
-        } else {
-          await surveyService.triggerStudioFlow(run);
-        }
-      })
-    );
-    setProcessing(false);
-    console.log('submit data: ', data);
     
+    //async requests
+    await runRequests(queue, patientListDocument, data, 0);
+    
+    setProcessing(false);
+    setCurrentRequest(0);
+    setRequestCount(0);
+    console.log('submit data: ', data);
   }
+  
+  const runRequests = async (queue, patientListDocument, data, index) => {
+    const run = queue[index];
+    const nextRequestIndex = index + 1;
+    await request(run, patientListDocument, data);
+    if(queue.length > nextRequestIndex) {
+      setCurrentRequest(nextRequestIndex);
+      return await runRequests(queue, patientListDocument, data, nextRequestIndex);
+    }
+  }
+  
+  const request = async (run, patientListDocument, data) => {
+    // const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
+    return await (launchIsScheduled) ?
+      surveyService.scheduleMessage(run, data.scheduleDate) :
+      surveyService.triggerStudioFlow(run);
+  }
+  
   
   useEffect(() => {
     datastoreService.fetchPatientLists()
@@ -129,6 +145,10 @@ export default function Index() {
   }, [])
   
   return <>
+    {processing && <ProgressOverlay
+      requestCount={requestCount}
+      current={currentRequest}
+    />}
     <StepForm
       patientListCollection={patientListCollection}
       selectedPatientListSid={selectedPatientListSid}

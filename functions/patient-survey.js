@@ -31,8 +31,7 @@ exports.handler = async function (context, event, callback) {
     }
 
     const listDocuments = await fetchSyncDocuments(context, TWILIO_SYNC_SID);
-    console.log(listDocuments);
-    console.log('*****************event', event);
+
     const client = context.getTwilioClient();
     
 
@@ -82,8 +81,6 @@ exports.handler = async function (context, event, callback) {
             }
           });
         
-        
-
         analytics.track({
           userId: event.data.patientId,
           event: 'Survey sms outreach attempt',
@@ -96,6 +93,9 @@ exports.handler = async function (context, event, callback) {
         await analytics.flush(function (err, batch) {
           console.log('Flushed, and now this program can exit!');
         });
+        /*await new Promise((resolve) => setTimeout(() => {
+          resolve();
+        }, 1000));*/
 
 
         response.setBody({});
