@@ -5,10 +5,8 @@ import Button from "../button/button";
 import FileUploader from "../file-uploader/file-uploader";
 
 import DatePicker from "react-datepicker";
-/*import 'react-clock/dist/Clock.css';
-import 'react-time-picker/dist/TimePicker.css';*/
-import TimePicker from 'react-time-picker/dist/entry.nostyle';
 import RadioGroup from "../radio-group/radio-group";
+import TimePicker from "react-time-picker/dist/entry.nostyle";
 
 const StepForm = ({
   patientListCollection,
@@ -22,10 +20,13 @@ const StepForm = ({
   submit,
 	selectedDate,
 	setSelectedDate,
+	timeValue,
+	setTimeValue,
+	selectedInvokeType,
+	setSelectedInvokeType
 }) => {
 
 	const [currentStep, setCurrentStep] = useState(1);
-	// const [timeValue, setTimeValue] = useState(new Date());
 	
 	const scheduleOptions = [
 		{ value: 'Send Immediately', label: 'Send Immediately' },
@@ -43,6 +44,7 @@ const StepForm = ({
 			setCurrentStep(1);
 		}
 	}, [selectedPatientListSid, selectedSurveySid]);
+	
 	
 	return <div className={styles.container}>
 		<StepContainer
@@ -116,33 +118,30 @@ const StepForm = ({
 			note="Select date and time we should send surveys"
 		>
 			<>
-					
-					<p>Select date and time we should send surveys</p>
 				<RadioGroup
-					value={scheduleOptions[0].value}
+					value={selectedInvokeType}
 					options={scheduleOptions}
-					onChange={(value) => console.log('radio change trigger', value)}
+					onChange={setSelectedInvokeType}
 					name={'Schedule'}
 					disabled={currentStep < 3}
 				/>
 				
-			
-					<div className={styles.timeContainer}>
+				{selectedInvokeType === 'Schedule Outreach' && <div className={styles.timeContainer}>
 						<DatePicker
 							selected={selectedDate}
 							onChange={(date) => setSelectedDate(date)}
 							disabled={currentStep < 3}
 						/>
-		
-						{/*<TimePicker
-							onChange={setTimeValue}
+						<TimePicker
 							value={timeValue}
-						/>*/}
+							onChange={(val) => setTimeValue(val)}
+							disabled={currentStep < 3}
+						/>
 		
-					</div>
+					</div>}
 		
 					<Button
-						disabled={currentStep < 3}
+						disabled={(currentStep) < 3 || selectedInvokeType === ''}
 						click={submit}
 						fill={'#0263E0'}
 					>

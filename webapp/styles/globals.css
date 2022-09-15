@@ -773,16 +773,30 @@ input[type="checkbox"] {
     color: #6d6d6d;
 }
 .react-time-picker__wrapper {
-    display: flex;
+    /*display: flex;
     flex-grow: 1;
     flex-shrink: 0;
-    border: thin solid gray;
+    border: thin solid gray;*/
+    width: 117px;
+    height: 37px;
+    left: 486px;
+    top: 786px;
+    background: #F4F4F6;
+    border-radius: 8px;
+    display: flex;
 }
 .react-time-picker__inputGroup {
-    min-width: calc((4px * 3) +  0.54em * 6  +  0.217em * 2);
+    /*min-width: calc((4px * 3) +  0.54em * 6  +  0.217em * 2);*/
     flex-grow: 1;
     padding: 0 2px;
     box-sizing: content-box;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #606B85;
+    margin-left: 5px;
 }
 .react-time-picker__inputGroup__divider {
     padding: 1px 0;

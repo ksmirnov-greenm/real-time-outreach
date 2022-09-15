@@ -10,20 +10,14 @@ const RadioGroup = ({
 	disabled
 } ) => {
 	
-		const [stateValue, setStateValue] = useState(value);
-		
-		useEffect(() => {
-			onChange(stateValue);
-		}, [stateValue]);
-	
 		return <div className={styles.radioGroupContainer}>
 			{options.map(item => <div key={uuidV4()} className={styles.radioItemContainer}>
 				<input
 					type="radio"
 					id={`radio-group-id-${item.label}`}
 				  name={name} value={item.value}
-					checked={item.value === stateValue}
-					onChange={() => setStateValue(item.value)}
+					checked={item.value === value}
+					onChange={() => onChange(item.value)}
 					disabled={disabled}
 					className={styles.radioInput}
 				/>

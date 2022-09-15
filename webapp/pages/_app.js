@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
 	// Use the layout defined at the page level, if available

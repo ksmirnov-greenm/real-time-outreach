@@ -13,7 +13,9 @@ export default function Index() {
   const [selectedPatientListSid, setSelectedPatientListSid] = useState('');
   const [surveyCollection, setSurveyCollection] = useState([]);
   const [selectedSurveySid, setSelectedSurveySid] = useState('');
+  const [selectedInvokeType, setSelectedInvokeType] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [timeValue, setTimeValue] = useState(new Date());
   
   const selectCurrentList = (sid) => {
     if (selectedPatientListSid === sid) {
@@ -120,6 +122,11 @@ export default function Index() {
     
   }, [])
   
+  useEffect(() => {
+    console.log('selectedDate: ', selectedDate, 'selected time: ', timeValue);
+    
+  }, [selectedDate, timeValue])
+  
   return <div>
     <StepForm
       patientListCollection={patientListCollection}
@@ -133,6 +140,10 @@ export default function Index() {
       submit={submit}
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
+      timeValue={timeValue}
+      setTimeValue={setTimeValue}
+      selectedInvokeType={selectedInvokeType}
+      setSelectedInvokeType={setSelectedInvokeType}
     />
   </div>
 }
