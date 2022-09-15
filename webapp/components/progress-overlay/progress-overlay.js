@@ -17,7 +17,7 @@ const ProgressOverlay = ({ requestCount, current }) => {
 			{requestCount > 0 && <span
 				className={styles.progressTitle}
 				style={{color: titleColor}}
-			><span style={{color: width === 50 ? '#fff' : titleColor}}>{current}</span> / {requestCount}</span>}
+			><span style={{color: width === 50 ? '#fff' : titleColor}}>{current}</span>&nbsp;/ {requestCount}</span>}
 		</div>
 	</div>
 }
