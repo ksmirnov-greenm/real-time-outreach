@@ -40,8 +40,8 @@ exports.handler = async function (context, event, callback) {
             from: '+17087667625', //todo: set phone from config
             parameters: {
               //TODO: use url from config
-              survey_link: 'https://' + context.DOMAIN_NAME + '/survey.html?runId=' + run.runId,
-              run_id: run.runId //needs to add event to segment after sms
+              surveyLink: 'https://' + context.DOMAIN_NAME + '/survey.html?runId=' + run.runId,
+              runId: run.runId //needs to add event to segment after sms
             }
           });
 

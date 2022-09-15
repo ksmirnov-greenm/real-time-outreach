@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {getPatientSurvey} from "../../../services/api-service";
 import surveyService from "../../../services/surveyService";
+import segmentService from "../../../services/segmentService";
 
 
 export default function Index () {
@@ -13,6 +14,7 @@ export default function Index () {
 	const [questions, setQuestions] = useState([]);
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const [patientId, setPatientId] = useState('');
+	const [survey, setSurvey] = useState({});
 	
 	const [selectedQuestion, setSelectedQuestion] = useState(null);
 	const [currentAnswer, setCurrentAnswer] = useState(undefined);
@@ -22,19 +24,28 @@ export default function Index () {
 	const {runId} = router.query;
 	
 	
-	const nextQuestion = () => {
+	const  nextQuestion = async () => {
 		const newAnswers = [...answers, currentAnswer];
+		await segmentService.track({
+							  event: 'survey_question_answered', //TODO: create shared list
+							  runId: runId, 
+							  surveyId: survey.id,
+							  question: questions[questionIndex],
+							  answer: currentAnswer});
+
 		setAnswers(newAnswers);
 		setCurrentAnswer(undefined);
 		const newIndex = questionIndex + 1;
 		
 		if(questions.length > newIndex) {
 			setQuestionIndex(newIndex);
-			//TODO: segment track answer
 			setSelectedQuestion(questions[newIndex])
 		} else {
 			console.log('submit', newAnswers);
-			//TODO: segment track complete
+			await segmentService.track({
+				event: 'survey_completed', //TODO: create shared list
+				runId: runId});
+
 			void router.push('/survey/completed');
 		}
 	}
@@ -43,12 +54,12 @@ export default function Index () {
 		if(runId) {
 			surveyService.getPatientSurveyByRunId(runId)
 				.then(res => {
-						const survey = res.survey;
+						setSurvey(res.survey);
 						setPatientId(res.patientId);
-						setTitle(survey.title);
-						if(survey.item.length) {
-							setQuestions(survey.item);
-							setSelectedQuestion(survey.item[questionIndex]);
+						setTitle(res.survey.title);
+						if(res.survey.item.length) {
+							setQuestions(res.survey.item);
+							setSelectedQuestion(res.survey.item[questionIndex]);
 						}
 				})
 		}

@@ -43,7 +43,7 @@ exports.handler = async function (context, event, callback) {
         .create({
            messagingServiceSid: 'MG96f1183aa1a79d72f1dd9005fef6be43', //TODO: use from config
            body: JSON.stringify(msgBody),
-           sendAt: '2022-09-12T22:30:08+0000', //TODO: set from event
+           sendAt: event.scheduleDate,
            scheduleType: 'fixed',
            // statusCallback: 'https://webhook.site/xxxxx', //TODO: probably use it to track status of message
            to: '+19853797489' //TODO: set from config
@@ -77,8 +77,8 @@ exports.handler = async function (context, event, callback) {
             from: '+17087667625', //todo: set phone from config
             parameters: {
               //TODO: use url from config
-              survey_link: 'https://' + context.DOMAIN_NAME + '/survey.html?runId=' + event.data.runId,
-              run_id: event.data.runId //needs to add event to segment after sms
+              surveyLink: 'https://' + context.DOMAIN_NAME + '/survey.html?runId=' + event.data.runId,
+              runId: event.data.runId //needs to add event to segment after sms
             }
           });
         

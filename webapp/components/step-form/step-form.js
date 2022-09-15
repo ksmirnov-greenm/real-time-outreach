@@ -22,14 +22,15 @@ const StepForm = ({
   submit,
 	selectedDate,
 	setSelectedDate,
+	setLaunchIsScheduled,
 }) => {
 
 	const [currentStep, setCurrentStep] = useState(1);
 	// const [timeValue, setTimeValue] = useState(new Date());
 	
 	const scheduleOptions = [
-		{ value: 'Send Immediately', label: 'Send Immediately' },
-		{ value: 'Schedule Outreach', label: 'Schedule Outreach' }
+		{ value: false, label: 'Send Immediately' },
+		{ value: true, label: 'Schedule Outreach' }
 	];
 
 	useEffect(() => {
@@ -121,7 +122,7 @@ const StepForm = ({
 				<RadioGroup
 					value={scheduleOptions[0].value}
 					options={scheduleOptions}
-					onChange={(value) => console.log('radio change trigger', value)}
+					onChange={(value) => setLaunchIsScheduled(value)}
 					name={'Schedule'}
 					disabled={currentStep < 3}
 				/>

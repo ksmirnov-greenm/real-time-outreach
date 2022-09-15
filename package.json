@@ -8,6 +8,7 @@
     "deploy": "twilio-run deploy"
   },
   "dependencies": {
+    "@aws-sdk/client-comprehend": "^3.171.0",
     "@twilio/runtime-handler": "1.2.3",
     "analytics-node": "^6.2.0",
     "twilio": "^3.56"
