@@ -86,10 +86,12 @@ export default function Index() {
   const submit = async () => {
     setProcessing(true);
     
+    const [hours, minutes] = timeValue.split(':');
+    
     const data = {
       patientListSid: selectedPatientListSid,
       surveySid: selectedSurveySid,
-      scheduleDate: selectedDate
+      scheduleDate: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hours, minutes)
     }
     
     //1. save queue to storage
