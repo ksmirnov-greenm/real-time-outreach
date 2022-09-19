@@ -18,7 +18,7 @@ export default function Index() {
   //TODO: create time picker
   //for now it is +16min, due to twilio limits 15min-7days,
   //TODO: ideally add limitation in pickers
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(Date.now() + (17 * 60 * 1000)));
   const [timeValue, setTimeValue] = useState(new Date());
   const [requestCount, setRequestCount] = useState(0);
   const [currentRequest, setCurrentRequest] = useState(0);

@@ -18,7 +18,7 @@ async function setSurveyPatientListQueue(data: any): Promise<Array<any>> {
   return Promise.resolve(result);
 }
 
-async function getPatientSurveyByRunId(runId: any): Promise<any> {
+async function  getPatientSurveyByRunId(runId: any): Promise<any> {
   const patientSurveys = await fetch(Uris.backendRoot + '/patient-survey', {
     method: 'POST',
     body: JSON.stringify({ action: 'GET', runId }),
@@ -31,7 +31,7 @@ async function getPatientSurveyByRunId(runId: any): Promise<any> {
   const run = patientSurveys.data.queue.find(q =>  runId === q.runId );
   const patientsList = await datastoreService.fetchPatientLists();
   const surveys = await datastoreService.getSurveys();
-  const survey = surveys.find(survey => survey.data.survey.id = run.surveyId).data.survey; 
+  const survey = surveys.find(survey => survey.data.survey.id == run.surveyId).data.survey; 
   return Promise.resolve({survey, patientId: run.patientId});
 }
 

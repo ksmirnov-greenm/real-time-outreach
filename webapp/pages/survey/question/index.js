@@ -54,6 +54,7 @@ export default function Index () {
 		if(runId) {
 			surveyService.getPatientSurveyByRunId(runId)
 				.then(res => {
+						console.log(res.survey);
 						setSurvey(res.survey);
 						setPatientId(res.patientId);
 						setTitle(res.survey.title);

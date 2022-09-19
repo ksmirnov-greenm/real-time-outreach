@@ -172,35 +172,44 @@ async function getParam(context, key) {
         return context.TWILIO_API_KEY_SECRET;
       }
 
-      case 'TWILIO_CONVERSATIONS_SID': {
+      case 'TWILIO_MESSAGING_SERVICE': {
         // value set in .env takes precedence
-        if (context.TWILIO_CONVERSATIONS_SID) return context.TWILIO_CONVERSATIONS_SID
-
-        const services = await client.conversations.services.list();
-        const service = services.find(s => s.friendlyName === context.APPLICATION_NAME);
-        if (service) {
-          await setParam(context, key, service.sid);
-          return service.sid;
-        }
-
-        console.log('Conversation service not found so creating a new conversation service...');
-        let sid = null;
-        await client.conversations.services
-          .create({ friendlyName: context.APPLICATION_NAME })
-          .then((result) => {
-            sid = result.sid;
-          })
-          .catch(err => {
-            throw new Error('Unable to create a Twilio Conversation Service!!! ABORTING!!!');
-          });
-        await setParam(context, key, sid);
-
-        return sid;
+        return context.TWILIO_MESSAGING_SERVICE
       }
 
-      case 'TWILIO_SENDGRID_API_KEY': {
+      case 'TWILIO_SMS_STUDIO_FLOW': {
         // value set in .env takes precedence
-        return context.TWILIO_SENDGRID_API_KEY
+        return context.TWILIO_SMS_STUDIO_FLOW
+      }
+
+      case 'TWILIO_IVR_STUDIO_FLOW': {
+        // value set in .env takes precedence
+        return context.TWILIO_IVR_STUDIO_FLOW
+      }
+
+      case 'TWILIO_FROM_PHONE_NUMBER': {
+        // value set in .env takes precedence
+        return context.TWILIO_FROM_PHONE_NUMBER
+      }
+
+      case 'TWILIO_SCHEDULE_PHONE_NUMBER': {
+        // value set in .env takes precedence
+        return context.TWILIO_SCHEDULE_PHONE_NUMBER
+      }
+
+      case 'SEGMENT_ANALYTICS_KEY': {
+        // value set in .env takes precedence
+        return context.SEGMENT_ANALYTICS_KEY
+      }
+
+      case 'AWS_ACCESS_KEY_ID': {
+        // value set in .env takes precedence
+        return context.AWS_ACCESS_KEY_ID
+      }
+
+      case 'AWS_SECRET_ACCESS_KEY': {
+        // value set in .env takes precedence
+        return context.AWS_SECRET_ACCESS_KEY
       }
 
       case 'TWILIO_SYNC_SID': {
@@ -223,32 +232,6 @@ async function getParam(context, key) {
           })
           .catch(err => {
             throw new Error('Unable to create a Twilio Sync Service!!! ABORTING!!!');
-          });
-        await setParam(context, key, sid);
-
-        return sid;
-      }
-
-      case 'TWILIO_VERIFY_SID': {
-        // value set in .env takes precedence
-        if (context.TWILIO_SYNC_SID) return context.TWILIO_SYNC_SID
-
-        const services = await client.verify.services.list();
-        const service = services.find(s => s.friendlyName === context.APPLICATION_NAME);
-        if (service) {
-          await setParam(context, key, service.sid);
-          return service.sid;
-        }
-
-        console.log('Verify service not found so creating a new verify service...');
-        let sid = null;
-        await client.verify.services
-          .create({ friendlyName: context.APPLICATION_NAME })
-          .then((result) => {
-            sid = result.sid;
-          })
-          .catch(err => {
-              throw new Error('Unable to create a Twilio Verify Service!!! ABORTING!!!');
           });
         await setParam(context, key, sid);
 

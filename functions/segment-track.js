@@ -33,8 +33,15 @@ exports.handler = async function (context, event, callback) {
     //event names for segment
     const events = {
       sms_has_been_sent: 'Survey sms outreach has been sent',
+      ivr_has_been_started: 'Survey ivr outreach has been started',
       survey_question_answered: 'Survey answer',
+      //TODO: replace event above
+      sms_survey_question_answered: 'Survey answer',
+      ivr_survey_question_answered: 'Survey answer',
       survey_completed: 'Survey completed',
+      //TODO: replace event above
+      sms_survey_completed: 'Survey completed',
+      ivr_survey_completed: 'Survey completed',
     }
     if (event.runId) {
 
@@ -57,17 +64,19 @@ exports.handler = async function (context, event, callback) {
             break;
           }
           case 'survey_question_answered': {
-            //get sentiments
-            //TODO: needs targeted sentiments which is Async, needs s3 bucket and way to pull created results
-            // const awsClient = new ComprehendClient({ region: "us-east-1" });
-            // var params = {
-            //   LanguageCode: 'en',
-            //   Text: 'my experience is so positive, i am happy be here with my friends, they are so good and polite!' /* required */
-            // };
-            // const command = new DetectSentimentCommand(params);
-            // const response = await awsClient.send(command);
-            // console.log(response);
-
+            let sentiment = null;
+            if(event.question.type == 'text') {
+              //get sentiments
+              //TODO: needs targeted sentiments which is Async, needs s3 bucket and way to pull created results
+              const awsClient = new ComprehendClient({ region: "us-east-1" });
+              var params = {
+                LanguageCode: 'en',
+                Text: event.answer //TODO: for ivr have to use TranscriptionText
+              };
+              const command = new DetectSentimentCommand(params);
+              const response = await awsClient.send(command);
+              sentiment = response.Sentiment;
+            }
 
             analytics.track({
               userId: run.patientId,
@@ -75,7 +84,8 @@ exports.handler = async function (context, event, callback) {
               properties: {
                 surveyId: event.surveyId,
                 question: event.question,
-                answer: event.answer,
+                answer: event.answer, //TODO: for ivr probably have to swich 1->true,2->false
+                sentiment: sentiment,
                 outreachMethod: 'sms'
               }
             });
