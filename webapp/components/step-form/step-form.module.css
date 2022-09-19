@@ -80,3 +80,16 @@
     margin-bottom: 16px;
     width: 360px;
 }
+
+.delete-btn {
+    width: 24px;
+    height: 24px;
+    background: #FEECEC;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    border: none;
+    outline: none;
+}

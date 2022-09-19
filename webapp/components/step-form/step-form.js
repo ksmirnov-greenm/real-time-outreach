@@ -24,9 +24,13 @@ const StepForm = ({
 	setLaunchIsScheduled,
 	timeValue,
 	setTimeValue,
+	removePatientList,
+	removeSurvey
 }) => {
 
 	const [currentStep, setCurrentStep] = useState(1);
+	
+	const [overSid, setOverSid] = useState('');
 	
 	const scheduleOptions = [
 		{ value: false, label: 'Send Immediately' },
@@ -65,7 +69,12 @@ const StepForm = ({
 
 			{patientListCollection.map(patientList =>
 
-				<div key={patientList.sid} className={styles.filename}>
+				<div
+					key={patientList.sid}
+					className={styles.filename}
+					onMouseOver={() => setOverSid(patientList.sid)}
+					onMouseLeave={() => setOverSid('')}
+				>
 					<input
 						type="checkbox"
 						value={patientList.sid}
@@ -74,6 +83,12 @@ const StepForm = ({
 						disabled={patientListCollection.length === 0}
 					/>
 					{patientList.data.fileName}
+					
+					{overSid === patientList.sid && <button className={styles.deleteBtn}  onClick={() => removePatientList(patientList.sid)}>
+						<svg width="8" height="10" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M7.33333 2.49999H5.66667V2.08333C5.66667 1.75181 5.53497 1.43387 5.30055 1.19944C5.06613 0.965024 4.74819 0.833328 4.41667 0.833328H3.58333C3.25181 0.833328 2.93387 0.965024 2.69945 1.19944C2.46503 1.43387 2.33333 1.75181 2.33333 2.08333V2.49999H0.666667C0.55616 2.49999 0.450179 2.54389 0.372039 2.62203C0.293899 2.70017 0.25 2.80615 0.25 2.91666C0.25 3.02717 0.293899 3.13315 0.372039 3.21129C0.450179 3.28943 0.55616 3.33333 0.666667 3.33333H1.08333V7.91666C1.08333 8.24818 1.21503 8.56612 1.44945 8.80055C1.68387 9.03497 2.00181 9.16666 2.33333 9.16666H5.66667C5.99819 9.16666 6.31613 9.03497 6.55055 8.80055C6.78497 8.56612 6.91667 8.24818 6.91667 7.91666V3.33333H7.33333C7.44384 3.33333 7.54982 3.28943 7.62796 3.21129C7.7061 3.13315 7.75 3.02717 7.75 2.91666C7.75 2.80615 7.7061 2.70017 7.62796 2.62203C7.54982 2.54389 7.44384 2.49999 7.33333 2.49999ZM3.16667 2.08333C3.16667 1.97282 3.21057 1.86684 3.28871 1.7887C3.36685 1.71056 3.47283 1.66666 3.58333 1.66666H4.41667C4.52717 1.66666 4.63315 1.71056 4.71129 1.7887C4.78943 1.86684 4.83333 1.97282 4.83333 2.08333V2.49999H3.16667V2.08333ZM6.08333 7.91666C6.08333 8.02717 6.03943 8.13315 5.96129 8.21129C5.88315 8.28943 5.77717 8.33333 5.66667 8.33333H2.33333C2.22283 8.33333 2.11685 8.28943 2.03871 8.21129C1.96057 8.13315 1.91667 8.02717 1.91667 7.91666V3.33333H6.08333V7.91666Z" fill="#F22F46"/>
+						</svg>
+					</button>}
 				</div>
 			)}
 		</StepContainer>
@@ -96,7 +111,12 @@ const StepForm = ({
 			{(surveyCollection.length > 1) && <p className={styles.listtitle}>Choose survey</p>}
 
 			{surveyCollection.map(survey =>
-				<div key={survey.sid} className={styles.filename}>
+				<div
+					key={survey.sid}
+					className={styles.filename}
+					onMouseOver={() => setOverSid(survey.sid)}
+					onMouseLeave={() => setOverSid('')}
+				>
 					<input
 						type="checkbox"
 						value={survey.sid}
@@ -105,6 +125,11 @@ const StepForm = ({
 						disabled={surveyCollection.length === 1}
 					/>
 					{survey.data.fileName}
+					{overSid === survey.sid && <button className={styles.deleteBtn} onClick={() => removeSurvey(survey.sid)}>
+						<svg width="8" height="10" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M7.33333 2.49999H5.66667V2.08333C5.66667 1.75181 5.53497 1.43387 5.30055 1.19944C5.06613 0.965024 4.74819 0.833328 4.41667 0.833328H3.58333C3.25181 0.833328 2.93387 0.965024 2.69945 1.19944C2.46503 1.43387 2.33333 1.75181 2.33333 2.08333V2.49999H0.666667C0.55616 2.49999 0.450179 2.54389 0.372039 2.62203C0.293899 2.70017 0.25 2.80615 0.25 2.91666C0.25 3.02717 0.293899 3.13315 0.372039 3.21129C0.450179 3.28943 0.55616 3.33333 0.666667 3.33333H1.08333V7.91666C1.08333 8.24818 1.21503 8.56612 1.44945 8.80055C1.68387 9.03497 2.00181 9.16666 2.33333 9.16666H5.66667C5.99819 9.16666 6.31613 9.03497 6.55055 8.80055C6.78497 8.56612 6.91667 8.24818 6.91667 7.91666V3.33333H7.33333C7.44384 3.33333 7.54982 3.28943 7.62796 3.21129C7.7061 3.13315 7.75 3.02717 7.75 2.91666C7.75 2.80615 7.7061 2.70017 7.62796 2.62203C7.54982 2.54389 7.44384 2.49999 7.33333 2.49999ZM3.16667 2.08333C3.16667 1.97282 3.21057 1.86684 3.28871 1.7887C3.36685 1.71056 3.47283 1.66666 3.58333 1.66666H4.41667C4.52717 1.66666 4.63315 1.71056 4.71129 1.7887C4.78943 1.86684 4.83333 1.97282 4.83333 2.08333V2.49999H3.16667V2.08333ZM6.08333 7.91666C6.08333 8.02717 6.03943 8.13315 5.96129 8.21129C5.88315 8.28943 5.77717 8.33333 5.66667 8.33333H2.33333C2.22283 8.33333 2.11685 8.28943 2.03871 8.21129C1.96057 8.13315 1.91667 8.02717 1.91667 7.91666V3.33333H6.08333V7.91666Z" fill="#F22F46"/>
+						</svg>
+					</button>}
 				</div>
 			)}
 
@@ -135,6 +160,7 @@ const StepForm = ({
 							value={timeValue}
 							onChange={(val) => setTimeValue(val)}
 							disabled={currentStep < 3}
+							disableClock={true}
 						/>
 		
 					</div>}

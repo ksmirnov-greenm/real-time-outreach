@@ -165,6 +165,8 @@ export default function Index() {
       setLaunchIsScheduled={setLaunchIsScheduled}
       timeValue={timeValue}
       setTimeValue={setTimeValue}
+      removePatientList={(patientSid) => {console.log('remove patient', patientSid);}}
+      removeSurvey={(surveySid) => {console.log('remove survey', surveySid);}}
     />
   </>
 }
