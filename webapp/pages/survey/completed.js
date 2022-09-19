@@ -6,8 +6,11 @@ export default function Completed() {
 		<div className={styles.logo}>
 			<Logo color={"#FAFDFF"}/>
 		</div>
-		<div className={`${styles.text} ${styles.xl}`}>Thanks for completing this survey! </div>
-		<div className={`${styles.text} ${styles.md}`}>We highly appreciate your feedback</div>
+		<div className={styles.contentContainer}>
+			<div className={`${styles.text} ${styles.xl}`}>Thanks for completing this survey! </div>
+			<div className={`${styles.text} ${styles.md}`}>We highly appreciate your feedback</div>
+		</div>
+		
 		
 		<footer className={styles.footer}>
 			<span className={styles.footerText}>© 2022 Cloud City Healthcare</span>

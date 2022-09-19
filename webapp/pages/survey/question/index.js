@@ -3,7 +3,6 @@ import Logo from "../../../components/logo/logo";
 import SurveyButton from "../../../components/survey-button/survey-button";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {getPatientSurvey} from "../../../services/api-service";
 import surveyService from "../../../services/surveyService";
 import segmentService from "../../../services/segmentService";
 
@@ -46,7 +45,7 @@ export default function Index () {
 				event: 'survey_completed', //TODO: create shared list
 				runId: runId});
 
-			void router.push('/survey/completed');
+			void await router.push('/survey/completed');
 		}
 	}
 	
@@ -65,7 +64,6 @@ export default function Index () {
 				})
 		}
 	}, []);
-	
 	
 	return <div className={styles.container}>
 		<header className={styles.header}>
