@@ -49,10 +49,10 @@ async function addPatientList(patientList: any[], fileName: string): Promise<any
 
 
 
-async function removePatientList(patientListId: string) {
+async function removePatientList(patientListSid: string) {
   const appointmentResp = await fetch(Uris.backendRoot + '/datastore/patients', {
     method: 'POST',
-    body: JSON.stringify({ action: 'REMOVE', patientListId: patientListId }),
+    body: JSON.stringify({ action: 'REMOVE', patientListSid: patientListSid }),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ async function removePatientList(patientListId: string) {
   }).then(r => r.json());
 
   if (!appointmentResp) {
-    Promise.reject({ error: "Failed to remove appointment or did not find appointment!"});
+    Promise.reject({ error: "Failed to remove patients list!"});
   }
 
   return Promise.resolve(appointmentResp);
@@ -112,6 +112,25 @@ async function getSurveys(): Promise<any[]> {
 
   return Promise.resolve(surveys);
 }
+
+async function removeSurvey(surveySid: string) {
+  const res = await fetch(Uris.backendRoot + '/datastore/surveys', {
+    method: 'POST',
+    body: JSON.stringify({ action: 'REMOVE', surveySid: surveySid }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then(r => r.json());
+
+  if (!res) {
+    Promise.reject({ error: "Failed to remove survey!"});
+  }
+
+  return Promise.resolve(res);
+}
+
+
 
 export default {
   fetchPatientLists,

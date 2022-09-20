@@ -1,0 +1,34 @@
+{
+  "resourceType" : "Questionnaire",
+  "id" : "demo_survey_1",
+  "title" : "Satisfaction Survey",
+  "status" : "draft",
+  "experimental" : true,
+  "subjectType" : ["Patient"],
+  "item" : [{
+    "linkId" : "1",
+    "text" : "The provider listened carefully to me",
+    "type" : "boolean"
+  },
+  {
+    "linkId" : "2",
+    "text" : "The provider knew important information about my medical history",
+    "type" : "boolean"
+  },  
+  {
+    "linkId" : "3",
+    "text" : "The provider explained things in a way that was easy to understand",
+    "type" : "boolean"
+  },  
+  {
+    "linkId" : "4",
+    "text" : "The provider answered all my questions to my satisfaction",
+    "type" : "boolean"
+  },  
+  {
+    "linkId" : "5",
+    "text" : "Please describe any other information about your experience you want to share with us",
+    "type" : "text"
+  }
+  ]
+}

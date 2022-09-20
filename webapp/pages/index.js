@@ -19,7 +19,7 @@ export default function Index() {
   //for now it is +16min, due to twilio limits 15min-7days,
   //TODO: ideally add limitation in pickers
   const [selectedDate, setSelectedDate] = useState(new Date(Date.now() + (17 * 60 * 1000)));
-  const [timeValue, setTimeValue] = useState(new Date());
+  const [timeValue, setTimeValue] = useState('');
   const [requestCount, setRequestCount] = useState(0);
   const [currentRequest, setCurrentRequest] = useState(0);
   
@@ -85,7 +85,7 @@ export default function Index() {
   
   const submit = async () => {
     setProcessing(true);
-    
+   
     const [hours, minutes] = timeValue.split(':');
     
     const data = {
@@ -109,6 +109,16 @@ export default function Index() {
     setCurrentRequest(0);
     setRequestCount(0);
     console.log('submit data: ', data);
+  }
+  
+  const removePatientList = async (sid) => {
+    const patientDocument = await datastoreService.removePatientList(sid);
+    setPatientListCollection(patientListCollection.filter(l=>l.sid != sid));
+  }
+
+  const removeSurvey = async (sid) => {
+    const patientDocument = await datastoreService.removePatientList(sid);
+    setSurveyCollection(surveyCollection.filter(l=>l.sid != sid));
   }
   
   const runRequests = async (queue, patientListDocument, data, index) => {
@@ -167,8 +177,8 @@ export default function Index() {
       setLaunchIsScheduled={setLaunchIsScheduled}
       timeValue={timeValue}
       setTimeValue={setTimeValue}
-      removePatientList={(patientSid) => {console.log('remove patient', patientSid);}}
-      removeSurvey={(surveySid) => {console.log('remove survey', surveySid);}}
+      removePatientList={removePatientList}
+      removeSurvey={removeSurvey}
     />
   </>
 }

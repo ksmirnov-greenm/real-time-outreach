@@ -12,7 +12,7 @@ const PATIENT_SYNC_DOCUMENT = 'Patients';
 
 const assert = require("assert");
 const { getParam } = require(Runtime.getFunctions()['helpers'].path);
-const {fetchSyncDocuments, upsertSyncDocument, read_fhir, save_fhir } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
+const {fetchSyncDocuments, upsertSyncDocument, read_fhir, save_fhir, deleteSyncDocumentBySid } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
 
 // --------------------------------------------------------------------------------
 function transform_fhir_to_patient(fhir_patient, fhir_medication_statements, fhir_conditions) {
@@ -69,9 +69,9 @@ exports.handler = async function(context, event, callback) {
       }
 
       case 'REMOVE': {
-        //TODO: remove
+        const res = await deleteSyncDocumentBySid(context, TWILIO_SYNC_SID, event.patientListSid);
         response.setStatusCode(200);
-        response.setBody({ patientListSid : event.patientListSid });
+        response.setBody({ res });
         return callback(null, response);
       }
 

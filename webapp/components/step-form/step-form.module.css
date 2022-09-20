@@ -4,7 +4,7 @@
     margin-left: 178px;
     margin-top: 32px;
     margin-bottom: 32px;
-    overflow: scroll;
+    /* overflow: scroll; */
     width: inherit;
 }
 
@@ -82,8 +82,8 @@
 }
 
 .delete-btn {
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
     background: #FEECEC;
     border-radius: 8px;
     display: flex;
@@ -92,4 +92,5 @@
     margin-left: 10px;
     border: none;
     outline: none;
+    cursor: pointer;
 }
