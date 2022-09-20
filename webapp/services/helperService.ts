@@ -1,3 +1,4 @@
+import { FhirModel, PatientsFhirBundle } from "../models/fhir.model";
 import { Uris } from "./constants";
 const assert = require('assert');
 
@@ -24,11 +25,29 @@ function csv2json(csv){
     }
     result.push(obj);
   }
-  //return result; //JavaScript object
-  return JSON.stringify(result); //JSON
+  return result; //JavaScript object
 }
 
+function text2json(text){
+  const objArray = <PatientsFhirBundle>JSON.parse(text);
+  
+  const result = [];
+  objArray.entry.forEach(element => {
+    const obj = {
+      patientId: element.id,
+      patientFirstName: element.name.find(x => x.use === 'official')?.given.join(' '),
+      patientLastName: element.name.find(x => x.use === 'official')?.family,
+      patientPhone: element.telecom.find(x => x.use === 'mobile')?.value,
+      birthday: element.birthDate,
+      gender: element.gender
+    }
+
+    result.push(obj);
+  });
+  return result;
+}
 
 export default {
   csv2json,
+  text2json,
 };
