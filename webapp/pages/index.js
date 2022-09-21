@@ -43,15 +43,19 @@ export default function Index() {
   
   const uploadPatientList = (e) => {
     const file = Array.from(e.target.files);
+    let fileExtension = file[0]?.name?.split('.')?.pop();
     const reader = new FileReader();
     reader.readAsText(file[0]);
     reader.onload = async (event) => {
-      const csv = event.target.result;
-      const data = csv.split(/\r?\n/);
-      const n = data.filter(r => r.length > 0).length - 1; // # of lines excluding empty line & header
-      const jsonText = helperService.csv2json(csv);
-      const jsonObj = JSON.parse(jsonText);
       
+      const jsonObj = (() => {
+        switch(fileExtension) {
+          case 'csv': return helperService.csv2json(event.target.result);
+          case 'json': return helperService.text2json(event.target.result);
+          default: return {};
+        }
+      })();
+
       const patientDocument = await datastoreService.addPatientList(jsonObj, file[0].name);
       
       if (patientListCollection.length === 0) {
