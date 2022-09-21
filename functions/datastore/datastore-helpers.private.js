@@ -156,6 +156,28 @@ async function deleteSyncDocument(context, syncServiceSid, syncDocumentName) {
   }
 }
 
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * delete an existing Sync document by sid
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ * - documentSid: sid
+ *
+ * returns: document if successful, null if nothing was delete
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function selectSyncDocumentBySid(context, syncServiceSid, documentSid) {
+  const client = context.getTwilioClient();
+  const ret = await client.sync
+    .services(syncServiceSid)
+    .documents(documentSid).fetch();
+
+  return ret;
+}
+
 /*
  * ----------------------------------------------------------------------------------------------------
  * delete an existing Sync document by sid
@@ -329,6 +351,7 @@ module.exports = {
   fetchSyncDocuments,
   upsertSyncDocument,
   deleteSyncDocument,
+  selectSyncDocumentBySid,
   deleteSyncDocumentBySid,
   fetchSyncMapItem,
   insertSyncMapItem,

@@ -7,8 +7,8 @@ analytics.flushed = true;
  * track segment events
  * event
  *  -event
- *  -runId: for event 'sms_has_been_sent'
- *  -question: for event 'survey_question_answered'
+ *  -runId:
+ *  -outreachMethod: 'sms','ivr' default 'sms'  
  *  -anwser: for event 'survey_question_answered'
  */
 
@@ -35,69 +35,76 @@ exports.handler = async function (context, event, callback) {
       sms_has_been_sent: 'Survey sms outreach has been sent',
       ivr_has_been_started: 'Survey ivr outreach has been started',
       survey_question_answered: 'Survey answer',
-      //TODO: replace event above
-      sms_survey_question_answered: 'Survey answer',
-      ivr_survey_question_answered: 'Survey answer',
       survey_completed: 'Survey completed',
-      //TODO: replace event above
-      sms_survey_completed: 'Survey completed',
-      ivr_survey_completed: 'Survey completed',
     }
-    if (event.runId) {
 
+    const outreachMethod = event.outreachMethod ? event.outreachMethod : 'sms';
+
+    if (event.runId) {
       //TODO: move this to private to share with patient-survey function
       const listDocuments = await fetchSyncDocuments(context, TWILIO_SYNC_SID);
       const patientSurveyDocument = listDocuments.find(d => d.uniqueName === 'PatientsSurveys'); //todo: replace
       const run = patientSurveyDocument.data.queue.find(d => d.runId === event.runId);
 
+      const survey = listDocuments.find(d => d.sid === run.surveySid).data.survey;
+
       if (run) {
         switch (event.event) {
-          case 'sms_has_been_sent': {
+          case 'sms_has_been_sent':
+          case 'survey_completed':
+          case 'ivr_has_been_started': {
             analytics.track({
               userId: run.patientId,
               event: events[event.event],
               properties: {
-                surveyId: run.surveyId,
-                outreachMethod: 'sms'
+                surveyId: survey.id,
+                outreachMethod: outreachMethod
               }
             });
             break;
           }
           case 'survey_question_answered': {
             let sentiment = null;
-            if(event.question.type == 'text') {
+            let answer = event.answer;
+            const question = survey.item.find(q => q.linkId === event.questionId);
+
+            if (question.type == 'text') {
+
+              if (outreachMethod == 'ivr') {
+                //TranscriptionText  from studio flow recordVoiceMail widget
+                answer = event.TranscriptionText;
+              }
+
               //get sentiments
               //TODO: needs targeted sentiments which is Async, needs s3 bucket and way to pull created results
               const awsClient = new ComprehendClient({ region: "us-east-1" });
               var params = {
                 LanguageCode: 'en',
-                Text: event.answer //TODO: for ivr have to use TranscriptionText
+                Text: answer
               };
               const command = new DetectSentimentCommand(params);
               const response = await awsClient.send(command);
               sentiment = response.Sentiment;
+            }
+            if (question.type == 'boolean' && outreachMethod == 'ivr') {
+              //ivr press buttons mapping here
+              if (answer == 1) {
+                answer = true;
+              }
+              if (answer == 2) {
+                answer = false;
+              }
             }
 
             analytics.track({
               userId: run.patientId,
               event: events[event.event],
               properties: {
-                surveyId: event.surveyId,
-                question: event.question,
-                answer: event.answer, //TODO: for ivr probably have to swich 1->true,2->false
+                surveyId: survey.id,
+                question: question,
+                answer: answer,
                 sentiment: sentiment,
-                outreachMethod: 'sms'
-              }
-            });
-            break;
-          }
-          case 'survey_completed': {
-            analytics.track({
-              userId: run.patientId,
-              event: events[event.event],
-              properties: {
-                surveyId: run.surveyId,
-                outreachMethod: 'sms'
+                outreachMethod: outreachMethod
               }
             });
             break;

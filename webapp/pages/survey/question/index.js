@@ -28,8 +28,7 @@ export default function Index () {
 		await segmentService.track({
 							  event: 'survey_question_answered', //TODO: create shared list
 							  runId: runId, 
-							  surveyId: survey.id,
-							  question: questions[questionIndex],
+							  questionId: questions[questionIndex].linkId,
 							  answer: currentAnswer});
 
 		setAnswers(newAnswers);
