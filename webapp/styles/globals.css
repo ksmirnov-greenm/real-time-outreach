@@ -10,13 +10,8 @@ body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     font-style: normal;
-}
-
-html,
-body,
-#__next {
     height: 100%;
-    width: 100%;
+    width:100vw;
 }
 
 input[type="file"] {
@@ -30,6 +25,7 @@ input[type="checkbox"] {
     height: 16px;
     width: 16px;
 }
+
 /* stylelint-disable */
  .react-datepicker__year-read-view--down-arrow,
  .react-datepicker__month-read-view--down-arrow,

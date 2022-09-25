@@ -1,0 +1,34 @@
+.backdrop {
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    z-index: 999999;
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-container {
+    height: 307px;
+    width: 606px;
+    background: #FFFFFF;
+    box-shadow: 0 16px 24px 4px rgba(18, 28, 45, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    border: 0;
+    outline: 0;
+    height: 24px;
+    width: 24px;
+    background: none;
+    cursor: pointer;
+}
