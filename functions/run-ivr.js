@@ -24,7 +24,7 @@ exports.handler = async function (context, event, callback) {
             to: '+15673234956',
             from: '+17087667625', //todo: set phone from config
             parameters: {
-              runId: '',
+              runId: 'e68a7f7e-674f-4284-889f-44ba02f164df',
               survey: {
                 "resourceType" : "Questionnaire",
                 "id" : "3141",

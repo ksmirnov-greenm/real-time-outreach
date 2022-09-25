@@ -52,7 +52,7 @@ async function fetchSyncDocuments(context, syncServiceSid) {
     .services(syncServiceSid)
     .documents
     .list();
-    return documents;
+  return documents;
   return document; // will be 'undefined' is not found
 }
 
@@ -101,7 +101,7 @@ async function upsertSyncDocument(context, syncServiceSid, syncDocumentName, syn
   assert(syncServiceSid, 'missing parameter: syncServiceSid!!!');
   assert(syncDocumentName, 'missing parameter: syncDocumentName!!!');
   assert(syncDocumentData, 'missing parameter: syncDocumentData!!!');
-  
+
   const client = context.getTwilioClient();
 
   let document = await _fetchSyncDocument(client, syncServiceSid, syncDocumentName)
@@ -156,6 +156,50 @@ async function deleteSyncDocument(context, syncServiceSid, syncDocumentName) {
   }
 }
 
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * delete an existing Sync document by sid
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ * - documentSid: sid
+ *
+ * returns: document if successful, null if nothing was delete
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function selectSyncDocumentBySid(context, syncServiceSid, documentSid) {
+  const client = context.getTwilioClient();
+  const ret = await client.sync
+    .services(syncServiceSid)
+    .documents(documentSid).fetch();
+
+  return ret;
+}
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * delete an existing Sync document by sid
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ * - documentSid: sid
+ *
+ * returns: document if successful, null if nothing was delete
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function deleteSyncDocumentBySid(context, syncServiceSid, documentSid) {
+  const client = context.getTwilioClient();
+  const ret = await client.sync
+    .services(syncServiceSid)
+    .documents(documentSid).remove();
+
+  return ret;
+}
+
+
 function __ensureSyncMapCreated(client, syncServiceSid, syncMapName) {
   return client.sync
     .services(syncServiceSid)
@@ -163,11 +207,11 @@ function __ensureSyncMapCreated(client, syncServiceSid, syncMapName) {
     .fetch()
     .catch(err => {
       console.log(err);
-      if(err.status === 404) {
+      if (err.status === 404) {
         return client.sync
-        .services(syncServiceSid)
-        .syncMaps
-        .create({uniqueName: syncMapName});
+          .services(syncServiceSid)
+          .syncMaps
+          .create({ uniqueName: syncMapName });
       }
 
       return Promise.resolve();
@@ -185,16 +229,16 @@ async function fetchSyncMapItem(client, syncServiceSid, syncMapName, syncMapItem
 
 async function insertSyncMapItem(client, syncServiceSid, syncMapName, syncMapItemKey, data) {
   await __ensureSyncMapCreated(client, syncServiceSid, syncMapName)
-  .then(() => client.sync
-    .services(syncServiceSid)
-    .syncMaps(syncMapName)
-    .syncMapItems
-    .create({ 
-      key: syncMapItemKey, 
-      data,
-      ttl: (24 * 60 * 60)
-    })
-    .then(mapItem => console.log(mapItem.key)));
+    .then(() => client.sync
+      .services(syncServiceSid)
+      .syncMaps(syncMapName)
+      .syncMapItems
+      .create({
+        key: syncMapItemKey,
+        data,
+        ttl: (24 * 60 * 60)
+      })
+      .then(mapItem => console.log(mapItem.key)));
 }
 
 async function updateSyncMapItem(client, syncServiceSid, syncMapName, syncMapItemKey, newData) {
@@ -203,7 +247,7 @@ async function updateSyncMapItem(client, syncServiceSid, syncMapName, syncMapIte
     .syncMaps(syncMapName)
     .syncMapItems(syncMapItemKey)
     .update({ data: newData })
-    .then(syncMapItem => console.log("Updated SyncMapItem: ",syncMapItem))
+    .then(syncMapItem => console.log("Updated SyncMapItem: ", syncMapItem))
     .catch(err => console.log(err));
 }
 
@@ -307,6 +351,8 @@ module.exports = {
   fetchSyncDocuments,
   upsertSyncDocument,
   deleteSyncDocument,
+  selectSyncDocumentBySid,
+  deleteSyncDocumentBySid,
   fetchSyncMapItem,
   insertSyncMapItem,
   updateSyncMapItem,

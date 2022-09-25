@@ -1,12 +1,12 @@
 import Layout from "../components/layout/layout";
 import {useEffect, useState} from "react";
+import StepForm from "../components/step-form/step-form";
 import helperService from "../services/helperService";
 import datastoreService from "../services/datastoreService";
 import surveyService from "../services/surveyService";
 import ProgressOverlay from "../components/progress-overlay/progress-overlay";
-import StepForm from "../components/step-form/step-form";
 
-export default function SurveySettings () {
+export default function Index() {
 	
 	const [processing, setProcessing] = useState(false);
 	
@@ -19,7 +19,7 @@ export default function SurveySettings () {
 	//for now it is +16min, due to twilio limits 15min-7days,
 	//TODO: ideally add limitation in pickers
 	const [selectedDate, setSelectedDate] = useState(new Date(Date.now() + (17 * 60 * 1000)));
-	const [timeValue, setTimeValue] = useState(new Date());
+	const [timeValue, setTimeValue] = useState('');
 	const [requestCount, setRequestCount] = useState(0);
 	const [currentRequest, setCurrentRequest] = useState(0);
 	
@@ -43,14 +43,18 @@ export default function SurveySettings () {
 	
 	const uploadPatientList = (e) => {
 		const file = Array.from(e.target.files);
+		let fileExtension = file[0]?.name?.split('.')?.pop();
 		const reader = new FileReader();
 		reader.readAsText(file[0]);
 		reader.onload = async (event) => {
-			const csv = event.target.result;
-			const data = csv.split(/\r?\n/);
-			const n = data.filter(r => r.length > 0).length - 1; // # of lines excluding empty line & header
-			const jsonText = helperService.csv2json(csv);
-			const jsonObj = JSON.parse(jsonText);
+			
+			const jsonObj = (() => {
+				switch(fileExtension) {
+					case 'csv': return helperService.csv2json(event.target.result);
+					case 'json': return helperService.text2json(event.target.result);
+					default: return {};
+				}
+			})();
 			
 			const patientDocument = await datastoreService.addPatientList(jsonObj, file[0].name);
 			
@@ -111,6 +115,16 @@ export default function SurveySettings () {
 		console.log('submit data: ', data);
 	}
 	
+	const removePatientList = async (sid) => {
+		const patientDocument = await datastoreService.removePatientList(sid);
+		setPatientListCollection(patientListCollection.filter(l=>l.sid !== sid));
+	}
+	
+	const removeSurvey = async (sid) => {
+		const patientDocument = await datastoreService.removePatientList(sid);
+		setSurveyCollection(surveyCollection.filter(l=>l.sid !== sid));
+	}
+	
 	const runRequests = async (queue, patientListDocument, data, index) => {
 		const run = queue[index];
 		const nextRequestIndex = index + 1;
@@ -167,13 +181,13 @@ export default function SurveySettings () {
 			setLaunchIsScheduled={setLaunchIsScheduled}
 			timeValue={timeValue}
 			setTimeValue={setTimeValue}
-			removePatientList={(patientSid) => {console.log('remove patient', patientSid);}}
-			removeSurvey={(surveySid) => {console.log('remove survey', surveySid);}}
+			removePatientList={removePatientList}
+			removeSurvey={removeSurvey}
 		/>
 	</>
 }
 
-SurveySettings.getLayout = function getLayout(page) {
+Index.getLayout = function getLayout(page) {
 	return (
 		<Layout>
 			{page}

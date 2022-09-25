@@ -1,0 +1,9 @@
+{
+  "resourceType" : "Questionnaire",
+  "id" : "3141_empty",
+  "title" : "Empty Questionnaire",
+  "status" : "draft",
+  "experimental" : true,
+  "subjectType" : ["Patient"],
+  "item" : []
+}

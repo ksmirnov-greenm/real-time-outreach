@@ -82,8 +82,8 @@
 }
 
 .delete-btn {
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
     background: #FEECEC;
     border-radius: 8px;
     display: flex;
@@ -92,4 +92,5 @@
     margin-left: 10px;
     border: none;
     outline: none;
+    cursor: pointer;
 }
