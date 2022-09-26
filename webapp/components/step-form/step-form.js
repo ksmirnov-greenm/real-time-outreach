@@ -156,11 +156,12 @@ const StepForm = ({
 							onChange={(date) => setSelectedDate(date)}
 							disabled={currentStep < 3}
 						/>
-						<TimePicker
+						<input
+							className={styles.timePicker} 
+							type="time"
 							value={timeValue}
-							onChange={(val) => setTimeValue(val)}
+							onChange={(e) => setTimeValue(e.target.value)}
 							disabled={currentStep < 3}
-							disableClock={true}
 						/>
 		
 					</div>}

@@ -32,6 +32,7 @@ exports.handler = async function (context, event, callback) {
 
     //event names for segment
     const events = {
+      survey_page_opened: 'Survey sms webpage has been opened',
       sms_has_been_sent: 'Survey sms outreach has been sent',
       ivr_has_been_started: 'Survey ivr outreach has been started',
       survey_question_answered: 'Survey answer',
@@ -46,13 +47,22 @@ exports.handler = async function (context, event, callback) {
       const patientSurveyDocument = listDocuments.find(d => d.uniqueName === 'PatientsSurveys'); //todo: replace
       const run = patientSurveyDocument.data.queue.find(d => d.runId === event.runId);
 
+      if (!run) {
+        response.setBody({ message: 'Can not find run for this runId' });
+        response.setStatusCode(404);
+        return callback(null, response);
+      }
+
+
       const survey = listDocuments.find(d => d.sid === run.surveySid).data.survey;
 
       if (run) {
         switch (event.event) {
+          case 'survey_page_opened':
           case 'sms_has_been_sent':
           case 'survey_completed':
           case 'ivr_has_been_started': {
+            console.log(event, run);
             analytics.track({
               userId: run.patientId,
               event: events[event.event],

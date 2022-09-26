@@ -38,10 +38,24 @@ async function  getPatientSurveyByRunId(runId: any): Promise<any> {
 
 
 
-async function triggerStudioFlow(data: any): Promise<Array<any>> {
+async function triggerSmsStudioFlow(data: any): Promise<Array<any>> {
   const result = await fetch(Uris.backendRoot + '/patient-survey', {
     method: 'POST',
-    body: JSON.stringify({ action: 'TRIGGER', data }),
+    body: JSON.stringify({ action: 'TRIGGER_SMS', data }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then((r) => r.json());
+
+  return Promise.resolve(result);
+}
+
+
+async function triggerIvrStudioFlow(data: any, survey: any): Promise<Array<any>> {
+  const result = await fetch(Uris.backendRoot + '/patient-survey', {
+    method: 'POST',
+    body: JSON.stringify({ action: 'TRIGGER_IVR', data, survey }),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -62,13 +76,16 @@ async function scheduleMessage(data: any, scheduleDate: any): Promise<Array<any>
       'Content-Type': 'application/json',
     }
   }).then((r) => r.json());
-
+  //TODO: handle this error in index and stop loop
+  //{status: 400, code: 35114, moreInfo: 'https://www.twilio.com/docs/errors/35114'}
+  console.log(result);
   return Promise.resolve(result);
 }
 
 export default {
   setSurveyPatientListQueue,
-  triggerStudioFlow,
+  triggerSmsStudioFlow,
+  triggerIvrStudioFlow,
   getPatientSurveyByRunId,
   scheduleMessage
 };

@@ -24,22 +24,37 @@ exports.handler = async function (context, event, callback) {
             to: '+15673234956',
             from: '+17087667625', //todo: set phone from config
             parameters: {
-              runId: 'e68a7f7e-674f-4284-889f-44ba02f164df',
+              runId: '2a5c81a1-33ff-4743-b295-6748a14ed420',
               survey: {
                 "resourceType" : "Questionnaire",
-                "id" : "3141",
-                "title" : "Basic Questionnaire",
+                "id" : "demo_survey_1",
+                "title" : "Satisfaction Survey",
                 "status" : "draft",
                 "experimental" : true,
                 "subjectType" : ["Patient"],
                 "item" : [{
                   "linkId" : "1",
-                  "text" : "Do you have allergies?",
+                  "text" : "The provider listened carefully to me",
                   "type" : "boolean"
                 },
                 {
                   "linkId" : "2",
-                  "text" : "Leave feedback",
+                  "text" : "The provider knew important information about my medical history",
+                  "type" : "boolean"
+                },  
+                {
+                  "linkId" : "3",
+                  "text" : "The provider explained things in a way that was easy to understand",
+                  "type" : "boolean"
+                },  
+                {
+                  "linkId" : "4",
+                  "text" : "The provider answered all my questions to my satisfaction",
+                  "type" : "boolean"
+                },  
+                {
+                  "linkId" : "5",
+                  "text" : "Please describe any other information about your experience you want to share with us",
                   "type" : "text"
                 }
                 ]
