@@ -176,8 +176,8 @@ const StepForm = ({
 						onChange={(e) => selectOutreach(e.target.value)}
 						disabled={currentStep < 3}
 					>
-						<option value='sms'>SMS</option>
-						<option value='ivr'>IVR</option>
+						<option value='sms'>SMS invitation and Web flow</option>
+						<option value='ivr'>IVR Flow</option>
 					</select>
 		
 					<Button
