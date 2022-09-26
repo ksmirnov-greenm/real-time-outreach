@@ -39,7 +39,7 @@ exports.handler = async function (context, event, callback) {
 
     switch (event.action) {
       case 'SCHEDULE': {
-        const msgBody = {runId:event.data.runId,method:'sms'};
+        const msgBody = {runId:event.data.runId,method: event.data.outreachMethod};
         const res = await client.messages
         .create({
            messagingServiceSid: TWILIO_MESSAGING_SERVICE,
@@ -54,10 +54,10 @@ exports.handler = async function (context, event, callback) {
 
         analytics.track({
           userId: event.data.patientId,
-          event: 'Survey sms outreach scheduled',
+          event: 'Survey ' + event.data.outreachMethod + ' outreach scheduled', //TODO: define all events in one place
           properties: {
             surveyId: event.data.surveyId,
-            outreachMethod: 'sms'
+            outreachMethod: event.data.outreachMethod
           }
         });
 
@@ -69,8 +69,15 @@ exports.handler = async function (context, event, callback) {
         response.setStatusCode(200);
         return callback(null, response);
       }
-      case 'TRIGGER': {
+      case 'TRIGGER_SMS': {
         const res = await triggerSMSFlow(client, context, event.data);
+        response.setBody({});
+        response.setStatusCode(200);
+        return callback(null, response);
+      }
+
+      case 'TRIGGER_IVR': {
+        const res = await triggerIVRFlow(client, context, event.data, event.survey);
         response.setBody({});
         response.setStatusCode(200);
         return callback(null, response);
@@ -101,7 +108,8 @@ exports.handler = async function (context, event, callback) {
             surveyId: surveyDocument.data.survey.id,
             patientPhone: patient.patientPhone,
             patientListSid: patientListDocument.sid,
-            surveySid: surveyDocument.sid
+            surveySid: surveyDocument.sid,
+            outreachMethod: event.data.outreachMethod
           }
         });
 
@@ -130,7 +138,18 @@ exports.handler = async function (context, event, callback) {
     }
   } catch (err) {
     console.log(THIS, err);
-    return callback(err);
+    const response = new Twilio.Response();
+    response.appendHeader('Content-Type', 'application/json');
+    if (context.DOMAIN_NAME.startsWith('localhost:')) {
+      response.appendHeader('Access-Control-Allow-Origin', '*');
+      response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
+      response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+    }
+    response.setStatusCode(err.status);
+    response.setBody(err);
+
+    //return callback(err);
+    return callback(null, response);
   }
 
 };

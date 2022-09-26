@@ -52,7 +52,7 @@ async function triggerIVRFlow(client, context, run, survey) {
   const analytics = new Analytics(SEGMENT_ANALYTICS_KEY, { flushAt: 20 }); //TODO: set key from config
   analytics.flushed = true;
 
-  await client.studio.flows(TWILIO_IVR_STUDIO_FLOW)
+  const ret = await client.studio.flows(TWILIO_IVR_STUDIO_FLOW)
   .executions
   .create({
     to: run.patientPhone,

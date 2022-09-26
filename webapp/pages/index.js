@@ -15,11 +15,12 @@ export default function Index() {
   const [surveyCollection, setSurveyCollection] = useState([]);
   const [selectedSurveySid, setSelectedSurveySid] = useState('');
   const [launchIsScheduled, setLaunchIsScheduled] = useState(false);
-  //TODO: create time picker
-  //for now it is +16min, due to twilio limits 15min-7days,
+  const [outreachMethod, setOutreachMethod] = useState('sms'); //sms,ivr
+  //TODO: create time picker 
+  //for now it is +16min, due to twilio limits 15min-7days, Date.now() + (17 * 60 * 1000)
   //TODO: ideally add limitation in pickers
-  const [selectedDate, setSelectedDate] = useState(new Date(Date.now() + (17 * 60 * 1000)));
-  const [timeValue, setTimeValue] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [timeValue, setTimeValue] = useState(('0' + (new Date()).getHours()).slice(-2) + ':'  + ('0' + (new Date()).getMinutes()).slice(-2));
   const [requestCount, setRequestCount] = useState(0);
   const [currentRequest, setCurrentRequest] = useState(0);
   
@@ -51,6 +52,7 @@ export default function Index() {
       const jsonObj = (() => {
         switch(fileExtension) {
           case 'csv': return helperService.csv2json(event.target.result);
+          //fhir patients format
           case 'json': return helperService.text2json(event.target.result);
           default: return {};
         }
@@ -95,9 +97,10 @@ export default function Index() {
     const data = {
       patientListSid: selectedPatientListSid,
       surveySid: selectedSurveySid,
+      outreachMethod: outreachMethod,
       scheduleDate: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hours, minutes)
     }
-    
+
     //1. save queue to storage
     const queue = await surveyService.setSurveyPatientListQueue(data);
     setRequestCount(queue.length);
@@ -107,7 +110,7 @@ export default function Index() {
     const surveyDocument = surveyCollection.find(d => d.sid === selectedSurveySid);
     
     //async requests
-    await runRequests(queue, patientListDocument, data, 0);
+    await runRequests(queue, patientListDocument, data, surveyDocument.data.survey, 0);
     
     setProcessing(false);
     setCurrentRequest(0);
@@ -125,21 +128,21 @@ export default function Index() {
     setSurveyCollection(surveyCollection.filter(l=>l.sid != sid));
   }
   
-  const runRequests = async (queue, patientListDocument, data, index) => {
+  const runRequests = async (queue, patientListDocument, data, survey, index) => {
     const run = queue[index];
     const nextRequestIndex = index + 1;
-    await request(run, patientListDocument, data);
+    await request(run, patientListDocument, data, survey);
     if(queue.length > nextRequestIndex) {
       setCurrentRequest(nextRequestIndex);
-      return await runRequests(queue, patientListDocument, data, nextRequestIndex);
+      return await runRequests(queue, patientListDocument, data, survey, nextRequestIndex);
     }
   }
   
-  const request = async (run, patientListDocument, data) => {
+  const request = async (run, patientListDocument, data, survey) => {
     // const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
     return await (launchIsScheduled) ?
       surveyService.scheduleMessage(run, data.scheduleDate) :
-      surveyService.triggerStudioFlow(run);
+      (run.outreachMethod == 'sms') ? surveyService.triggerSmsStudioFlow(run) : surveyService.triggerIvrStudioFlow(run, survey);
   }
   
   

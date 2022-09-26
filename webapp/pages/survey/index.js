@@ -2,13 +2,21 @@ import styles from './index.module.css';
 import Logo from "../../components/logo/logo";
 import Button from "../../components/button/button";
 import {useRouter} from "next/router";
+import segmentService from "../../services/segmentService";
 
 export default function Survey() {
-	
+
+
 	const router = useRouter();
 	const {runId} = router.query;
 	
-	const startSurvey = () => {
+	//TODO: this page load two times, should be fixed
+	segmentService.track({
+		event: 'survey_page_opened', //TODO: create shared list
+		runId: runId 
+		}).then(t=>console.log(t));
+
+		const startSurvey = () => {
 		void router.push({
 			pathname: '/survey/question',
 			query: { runId }
