@@ -24,6 +24,20 @@ async function fetchPatientLists(): Promise<Array<any>> {
   return Promise.resolve(result);
 }
 
+/* --------------------------------------------------------------------------------------------------------------
+ * fetch PatientLists from server datastore
+ *
+ * --------------------------------------------------------------------------------------------------------------
+ */
+async function fetchDashboardData(): Promise<Array<any>> {
+  return await fetch(Uris.backendRoot + '/datastore/dashboard', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then((r) => r.json());
+}
 
 /* --------------------------------------------------------------------------------------------------------------
  * create new patient list
@@ -134,6 +148,7 @@ async function removeSurvey(surveySid: string) {
 
 export default {
   fetchPatientLists,
+  fetchDashboardData,
   addPatientList,
   removePatientList,
   addSurvey,

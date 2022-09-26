@@ -1,9 +1,22 @@
 import Layout from "../components/layout/layout";
+import {useEffect, useState} from "react";
+import datastoreService from "../services/datastoreService";
+import DashboardTable from "../components/dashboard-table/dashboard-table";
 
 export default function Dashboard () {
-	return <div>
-		<h1>Dashboard will be ready soon. Development in progress...</h1>
-	</div>
+	
+	const [dashboardData, setDashboardData] = useState(null);
+	
+	useEffect(() => {
+		datastoreService.fetchDashboardData().then((data) => {
+			setDashboardData(data)
+		})
+		
+	}, []);
+	
+	return <>
+		<DashboardTable data={dashboardData}/>
+	</>
 }
 
 Dashboard.getLayout = function getLayout(page) {

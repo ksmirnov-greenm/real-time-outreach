@@ -9,7 +9,7 @@ export default function Layout({ children }) {
 	return (
 		<>
 			<Head>
-				<title>Survey</title>
+				<title>Real Time Outreach</title>
 			</Head>
 			<div className={styles.header}>
 				<Link href="/">

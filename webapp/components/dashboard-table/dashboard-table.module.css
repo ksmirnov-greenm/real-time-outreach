@@ -1,0 +1,149 @@
+.container {
+    margin-left: 257px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+    overflow-y: scroll;
+    width: inherit;
+}
+
+.title {
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 44px;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #121C2D;
+    margin: 0;
+}
+
+.dashboard-name {
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #606B85;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.table {
+    /*width: 926px;*/
+    border-collapse: collapse;
+}
+
+.table tr {
+    height: 36px;
+}
+
+.table th {
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #AEB2C1;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: inherit;
+    border-bottom: 1px solid #E1E3E9;
+}
+.table th:nth-child(1){
+    width: 230px;
+    padding-left: 8px;
+}
+.table td:nth-child(1){
+    width: 230px;
+    color: #121C2D;
+    padding-left: 8px;
+}
+.table th:nth-child(2){
+    width: 162px;
+}
+.table td:nth-child(2){
+    width: 162px;
+    color: #606B85;
+}
+.table th:nth-child(3),
+.table td:nth-child(3){
+    width: 475px;
+}
+
+.table td {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: inherit;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    border-bottom: 1px solid #E1E3E9;
+}
+
+.table td a {
+    color: #0263E0;
+    text-decoration: underline;
+}
+
+.dialog-title {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: #121C2D;
+}
+
+.dialog-patient {
+    font-weight: 400;
+    font-size: 18px;
+    color: #606B85;
+}
+
+.dialog-table {
+    display: grid;
+    width: 574px;
+    max-height: 235px;
+    overflow-y: scroll;
+    border-top: 1px solid #E1E3E9;
+    border-collapse: collapse;
+}
+
+.dialog-table td {
+    height: 36px;
+    width: inherit;
+    border-bottom: 1px solid #E1E3E9;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.dialog-table td:nth-child(1){
+    width: 30px;
+    padding-left: 8px;
+    color: #AEB2C1;
+}
+
+.dialog-table td:nth-child(2){
+    width: 350px;
+    font-weight: 500;
+    color: #121C2D;
+}
+
+.dialog-table td:nth-child(3){
+    width: 194px;
+    color: #606B85;
+}
+
+
