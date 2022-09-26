@@ -186,6 +186,8 @@ export default function Index() {
 			setTimeValue={setTimeValue}
 			removePatientList={removePatientList}
 			removeSurvey={removeSurvey}
+			outreachMethod={outreachMethod}
+			selectOutreach={setOutreachMethod}
 		/>
 	</>
 }
