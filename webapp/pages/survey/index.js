@@ -5,8 +5,7 @@ import {useRouter} from "next/router";
 import segmentService from "../../services/segmentService";
 
 export default function Survey() {
-
-
+	
 	const router = useRouter();
 	const {runId} = router.query;
 	

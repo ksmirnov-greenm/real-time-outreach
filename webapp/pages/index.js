@@ -6,7 +6,11 @@ export default function Index() {
   const router = useRouter();
   
   useEffect(() => {
-    void router.push('/survey-settings');
+    
+    if (router.pathname === '/') {
+      void router.push('/survey-settings');
+    }
+    
   }, []);
   
   return <></>
