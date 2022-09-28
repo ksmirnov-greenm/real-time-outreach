@@ -90,7 +90,6 @@ export default function Index() {
 	}
 	
 	const submit = async () => {
-		setProcessing(true);
 		
 		const [hours, minutes] = timeValue.split(':');
 		
@@ -100,6 +99,16 @@ export default function Index() {
 			outreachMethod: outreachMethod,
 			scheduleDate: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hours, minutes)
 		}
+
+		//TODO: refactor to nice error message
+		if(launchIsScheduled) {
+			if(((data.scheduleDate - (new Date()))/1000)  < 900 ||  ((data.scheduleDate - (new Date()))/1000)  > 604800){
+				alert('Time must be between 15 minutes and 7 days in the future, inclusive!');
+				return;
+			}
+		}
+
+		setProcessing(true);
 		
 		//1. save queue to storage
 		const queue = await surveyService.setSurveyPatientListQueue(data);
@@ -131,7 +140,8 @@ export default function Index() {
 	const runRequests = async (queue, patientListDocument, data, survey, index) => {
 		const run = queue[index];
 		const nextRequestIndex = index + 1;
-		await request(run, patientListDocument, data, survey);
+		const res = await request(run, patientListDocument, data, survey);
+		console.log(res);
 		if(queue.length > nextRequestIndex) {
 			setCurrentRequest(nextRequestIndex);
 			return await runRequests(queue, patientListDocument, data, survey, nextRequestIndex);

@@ -36,7 +36,7 @@ const StepForm = ({
 	
 	const scheduleOptions = [
 		{ value: false, label: 'Send Immediately' },
-		{ value: true, label: 'Schedule Outreach' }
+		{ value: true, label: 'Schedule Outreach (must be between 15 minutes and 7 days in the future, inclusive)' }
 	];
 
 	useEffect(() => {
