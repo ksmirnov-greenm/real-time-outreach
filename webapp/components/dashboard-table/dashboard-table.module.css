@@ -113,7 +113,7 @@
     display: grid;
     width: 574px;
     max-height: 235px;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-top: 1px solid #E1E3E9;
     border-collapse: collapse;
 }

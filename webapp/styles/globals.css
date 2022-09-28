@@ -6,7 +6,7 @@
     font-display: block;
 }
 
-body {
+html, body, #__next {
     margin: 0;
     font-family: 'Inter', sans-serif;
     font-style: normal;
@@ -339,7 +339,7 @@ input[type="checkbox"] {
     list-style: none;
     margin: 0;
     height: calc(195px + (1.7rem / 2));
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-right: 0;
     padding-left: 0;
     width: 100%;
@@ -641,7 +641,7 @@ input[type="checkbox"] {
  .react-datepicker__month-dropdown--scrollable,
  .react-datepicker__month-year-dropdown--scrollable {
     height: 150px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
  .react-datepicker__year-option,
  .react-datepicker__month-option,
