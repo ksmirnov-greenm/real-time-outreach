@@ -17,7 +17,7 @@ exports.handler = async function (context, event, callback) {
   const THIS = 'FUNCTION: /patient-surveys';
 
   const { getParam } = require(Runtime.getFunctions()['helpers'].path);
-  const { fetchSyncDocuments, upsertSyncDocument } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
+  const { fetchSyncDocuments, upsertSyncDocument, removeLists } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
   const { triggerSMSFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
   const TWILIO_SYNC_SID = await getParam(context, 'TWILIO_SYNC_SID');
   const TWILIO_MESSAGING_SERVICE = await getParam(context, 'TWILIO_MESSAGING_SERVICE');
@@ -114,6 +114,7 @@ exports.handler = async function (context, event, callback) {
         });
 
         const res = await upsertSyncDocument(context, TWILIO_SYNC_SID, PATIENTS_SURVEY_RESOURCE, { queue });
+        await removeLists(context, TWILIO_SYNC_SID);
 
         await analytics.flush(function (err, batch) {
           console.log('Flushed, and now this program can exit!');
