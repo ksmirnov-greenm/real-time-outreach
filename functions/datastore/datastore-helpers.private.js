@@ -343,6 +343,95 @@ async function fetchPublicJsonAsset(context, assetPath) {
 }
 
 
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * created list with unique name
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ * - listName: unique name for new list
+ *
+ * returns: created list object
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function addList(context, syncServiceSid, listName) {
+  assert(context, 'missing parameter: context!!!');
+  assert(syncServiceSid, 'missing parameter: syncServiceSid!!!');
+  assert(listName, 'missing parameter: listName!!!');
+
+  const client = context.getTwilioClient();
+
+  return await client.sync.services(syncServiceSid)
+    .syncLists
+    .create({ uniqueName: listName });
+}
+
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * added new object into existing list
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ * - listName: unique name for new list
+ * - item: object for adding
+ *
+ * returns: added element object
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function addListItem(context, syncServiceSid, listName, item) {
+  assert(context, 'missing parameter: context!!!');
+  assert(syncServiceSid, 'missing parameter: syncServiceSid!!!');
+  assert(listName, 'missing parameter: listName!!!');
+  assert(item, 'missing parameter: item!!!');
+
+  const client = context.getTwilioClient();
+
+  return await client.sync.services(syncServiceSid)
+    .syncLists(listName)
+    .syncListItems
+    .create({ data: item });
+}
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * removed all lists
+ *
+ * parameters
+ * - context: Twilio runtime context
+ * - syncServiceSid: Sync service SID
+ *
+ * returns: boolean
+ * ----------------------------------------------------------------------------------------------------
+ */
+async function removeLists(context, syncServiceSid) {
+  assert(context, 'missing parameter: context!!!');
+  assert(syncServiceSid, 'missing parameter: syncServiceSid!!!');
+
+  try {
+    const client = context.getTwilioClient();
+
+    const lists = await client.sync.services(syncServiceSid)
+      .syncLists
+      .list();
+
+    if (lists.length) {
+      await Promise.all(lists.map(async x => {
+        await client.sync.services(syncServiceSid)
+          .syncLists(x.sid)
+          .remove();
+      }));
+    }
+    return true;
+  }
+  catch (err) {
+    return false;
+  }
+}
+
+
 // --------------------------------------------------------------------------------
 module.exports = {
   read_fhir,
@@ -357,4 +446,7 @@ module.exports = {
   insertSyncMapItem,
   updateSyncMapItem,
   fetchPublicJsonAsset,
+  addList,
+  addListItem,
+  removeLists,
 };
