@@ -1,7 +1,7 @@
 const PATIENTS_SURVEY_RESOURCE = 'PatientsSurveys';
 
 const Analytics = require('analytics-node');
-const analytics = new Analytics('GWAsAPuFHWAz6VQvIOLCvzLhFTXfisww',{ flushAt: 20 }); //TODO: set key from config
+const analytics = new Analytics('GWAsAPuFHWAz6VQvIOLCvzLhFTXfisww', { flushAt: 20 }); //TODO: set key from config
 analytics.flushed = true;
 
 function create_UUID() {
@@ -18,7 +18,7 @@ exports.handler = async function (context, event, callback) {
 
   const { getParam } = require(Runtime.getFunctions()['helpers'].path);
   const { fetchSyncDocuments, upsertSyncDocument } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
-  const { triggerSMSFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
+  const { triggerSMSWebFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
   const TWILIO_SYNC_SID = await getParam(context, 'TWILIO_SYNC_SID');
   const TWILIO_MESSAGING_SERVICE = await getParam(context, 'TWILIO_MESSAGING_SERVICE');
   const TWILIO_SCHEDULE_PHONE_NUMBER = await getParam(context, 'TWILIO_SCHEDULE_PHONE_NUMBER');
@@ -35,26 +35,42 @@ exports.handler = async function (context, event, callback) {
     const listDocuments = await fetchSyncDocuments(context, TWILIO_SYNC_SID);
 
     const client = context.getTwilioClient();
-    
+
 
     switch (event.action) {
       case 'SCHEDULE': {
-        const msgBody = {runId:event.data.runId,method: event.data.outreachMethod};
+        const msgBody = { runId: event.data.runId, method: event.data.outreachMethod };
         const res = await client.messages
-        .create({
-           messagingServiceSid: TWILIO_MESSAGING_SERVICE,
-           body: JSON.stringify(msgBody),
-           sendAt: event.scheduleDate,
-           scheduleType: 'fixed',
-           // statusCallback: 'https://webhook.site/xxxxx', //TODO: probably use it to track status of message
-           to: TWILIO_SCHEDULE_PHONE_NUMBER
-         });
-         console.log(res);        
+          .create({
+            messagingServiceSid: TWILIO_MESSAGING_SERVICE,
+            body: JSON.stringify(msgBody),
+            sendAt: event.scheduleDate,
+            scheduleType: 'fixed',
+            // statusCallback: 'https://webhook.site/xxxxx', //TODO: probably use it to track status of message
+            to: TWILIO_SCHEDULE_PHONE_NUMBER
+          });
+        console.log(res);
         response.setBody(res);
 
+        //TODO: define all events in one place
+        let scheduled_event = '';
+        switch (event.data.outreachMethod) {
+          case 'sms-web': {
+            scheduled_event = 'SMS/Web survey outreach scheduled';
+            break;
+          }
+          case 'ivr': {
+            scheduled_event = 'IVR/IVR survey outreach scheduled';
+            break;
+          }
+          case 'sms': {
+            scheduled_event = 'SMS/SMS survey outreach scheduled';
+            break;
+          }
+        }
         analytics.track({
           userId: event.data.patientId,
-          event: 'Survey ' + event.data.outreachMethod + ' outreach scheduled', //TODO: define all events in one place
+          event: scheduled_event,
           properties: {
             surveyId: event.data.surveyId,
             outreachMethod: event.data.outreachMethod
@@ -64,13 +80,13 @@ exports.handler = async function (context, event, callback) {
         await analytics.flush(function (err, batch) {
           console.log('Flushed, and now this program can exit!');
         });
-        
+
 
         response.setStatusCode(200);
         return callback(null, response);
       }
-      case 'TRIGGER_SMS': {
-        const res = await triggerSMSFlow(client, context, event.data);
+      case 'TRIGGER_SMS_WEB': {
+        const res = await triggerSMSWebFlow(client, context, event.data);
         response.setBody({});
         response.setStatusCode(200);
         return callback(null, response);
@@ -86,7 +102,7 @@ exports.handler = async function (context, event, callback) {
       case 'CREATE': {
         const patientListDocument = listDocuments.find(d => d.sid === event.data.patientListSid);
         console.log('*********patientListDocument', patientListDocument);
-        
+
         const surveyDocument = listDocuments.find(d => d.sid === event.data.surveySid);
         const queue = patientListDocument.data.patientList.map(patient => {
 
@@ -124,7 +140,7 @@ exports.handler = async function (context, event, callback) {
         return callback(null, response);
       }
       case 'GET': {
-        const patientSurveyDocument =  listDocuments.find(d => d.uniqueName === PATIENTS_SURVEY_RESOURCE);
+        const patientSurveyDocument = listDocuments.find(d => d.uniqueName === PATIENTS_SURVEY_RESOURCE);
         console.log(patientSurveyDocument.data);
         response.setBody(patientSurveyDocument);
         response.setStatusCode(200);

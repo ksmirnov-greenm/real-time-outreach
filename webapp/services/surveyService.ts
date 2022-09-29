@@ -38,10 +38,10 @@ async function  getPatientSurveyByRunId(runId: any): Promise<any> {
 
 
 
-async function triggerSmsStudioFlow(data: any): Promise<Array<any>> {
+async function triggerSmsWebStudioFlow(data: any): Promise<Array<any>> {
   const result = await fetch(Uris.backendRoot + '/patient-survey', {
     method: 'POST',
-    body: JSON.stringify({ action: 'TRIGGER_SMS', data }),
+    body: JSON.stringify({ action: 'TRIGGER_SMS_WEB', data }),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ async function scheduleMessage(data: any, scheduleDate: any): Promise<Array<any>
 
 export default {
   setSurveyPatientListQueue,
-  triggerSmsStudioFlow,
+  triggerSmsWebStudioFlow,
   triggerIvrStudioFlow,
   getPatientSurveyByRunId,
   scheduleMessage

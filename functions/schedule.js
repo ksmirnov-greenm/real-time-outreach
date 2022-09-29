@@ -8,7 +8,7 @@ exports.handler = async function (context, event, callback) {
 
   const { getParam } = require(Runtime.getFunctions()['helpers'].path);
   const { fetchSyncDocuments, upsertSyncDocument } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
-  const { triggerSMSFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
+  const { triggerSMSWebFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
   const TWILIO_SYNC_SID = await getParam(context, 'TWILIO_SYNC_SID');
 
   try {
@@ -28,7 +28,17 @@ exports.handler = async function (context, event, callback) {
       const patientSurveyDocument = listDocuments.find(d => d.uniqueName === 'PatientsSurveys'); //todo: replace
       const run = patientSurveyDocument.data.queue.find(d => d.runId === body.runId);
       if (run) {
-        const res = await triggerSMSFlow(client, context, run);
+        switch(run.outreachMethod) {
+          case 'sms-web':{
+            await triggerSMSWebFlow(client, context, run);
+          }
+          case 'ivr': {
+            const survey = listDocuments.find(d => d.sid === run.surveySid).data.survey;
+            await triggerIVRFlow(client, context, run, survey);
+          }
+          //case 'sms': //TODO: uncomment after implementation
+            //await triggerSMSFlow(client, context, run);
+        } 
       }
     }
 

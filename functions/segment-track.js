@@ -8,7 +8,7 @@ analytics.flushed = true;
  * event
  *  -event
  *  -runId:
- *  -outreachMethod: 'sms','ivr' default 'sms'  
+ *  -outreachMethod: 'sms-web','ivr','sms' default 'sms-web'  
  *  -anwser: for event 'survey_question_answered'
  */
 
@@ -32,14 +32,18 @@ exports.handler = async function (context, event, callback) {
 
     //event names for segment
     const events = {
-      survey_page_opened: 'Survey sms webpage has been opened',
-      sms_has_been_sent: 'Survey sms outreach has been sent',
-      ivr_has_been_started: 'Survey ivr outreach has been started',
+      sms_web_has_been_sent: 'SMS invitation to the Web survey has been sent',
+      ivr_has_been_started: 'IVR invitation to the IVR survey has been sent',
+      sms_has_been_sent: 'SMS invitation to the SMS survey has been sent',
+      //do not have open\accepted event for SMS flow
+      survey_page_opened: 'Web Survey has been opened',
+      ivr_call_accepted: 'IVR survey incoming call accepted',
+      
       survey_question_answered: 'Survey answer',
       survey_completed: 'Survey completed',
     }
 
-    const outreachMethod = event.outreachMethod ? event.outreachMethod : 'sms';
+    const outreachMethod = event.outreachMethod ? event.outreachMethod : 'sms-web';
 
     if (event.runId) {
       //TODO: move this to private to share with patient-survey function
@@ -59,8 +63,10 @@ exports.handler = async function (context, event, callback) {
       if (run) {
         switch (event.event) {
           case 'survey_page_opened':
-          case 'sms_has_been_sent':
+          case 'sms_web_has_been_sent':
           case 'survey_completed':
+          case 'ivr_call_accepted':
+          case 'sms_has_been_sent':
           case 'ivr_has_been_started': {
             console.log(event, run);
             analytics.track({

@@ -15,7 +15,7 @@ export default function Index() {
 	const [surveyCollection, setSurveyCollection] = useState([]);
 	const [selectedSurveySid, setSelectedSurveySid] = useState('');
 	const [launchIsScheduled, setLaunchIsScheduled] = useState(false);
-	const [outreachMethod, setOutreachMethod] = useState('sms'); //sms,ivr
+	const [outreachMethod, setOutreachMethod] = useState('sms-web'); //sms-web,ivr,sms
 	//TODO: create time picker
 	//for now it is +16min, due to twilio limits 15min-7days, Date.now() + (17 * 60 * 1000)
 	//TODO: ideally add limitation in pickers
@@ -90,7 +90,6 @@ export default function Index() {
 	}
 	
 	const submit = async () => {
-		
 		const [hours, minutes] = timeValue.split(':');
 		
 		const data = {
@@ -152,7 +151,7 @@ export default function Index() {
 		// const patient = patientListDocument.data.patientList.find(d => d.patientId === run.patientId);
 		return await (launchIsScheduled) ?
 			surveyService.scheduleMessage(run, data.scheduleDate) :
-			(run.outreachMethod === 'sms') ? surveyService.triggerSmsStudioFlow(run) : surveyService.triggerIvrStudioFlow(run, survey);
+			(run.outreachMethod === 'sms-web') ? surveyService.triggerSmsWebStudioFlow(run) : surveyService.triggerIvrStudioFlow(run, survey);
 	}
 	
 	

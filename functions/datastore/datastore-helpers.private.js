@@ -199,6 +199,25 @@ async function deleteSyncDocumentBySid(context, syncServiceSid, documentSid) {
   return ret;
 }
 
+async function fetchSyncLists(context, syncServiceSid) {
+  const client = context.getTwilioClient();
+  const lists = await client.sync
+    .services(syncServiceSid)
+    .syncLists
+    .list({limit: 100});
+  return lists;
+}
+
+async function fetchSyncListItems(context, syncServiceSid, syncListSid) {
+  const client = context.getTwilioClient();
+  const listItems = await client.sync
+    .services(syncServiceSid)
+    .syncLists(syncListSid)
+    .syncListItems
+    .list({limit: 100});
+  return listItems;
+}
+
 
 function __ensureSyncMapCreated(client, syncServiceSid, syncMapName) {
   return client.sync
@@ -357,4 +376,6 @@ module.exports = {
   insertSyncMapItem,
   updateSyncMapItem,
   fetchPublicJsonAsset,
+  fetchSyncLists,
+  fetchSyncListItems,
 };

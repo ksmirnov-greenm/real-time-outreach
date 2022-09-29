@@ -177,9 +177,9 @@ async function getParam(context, key) {
         return context.TWILIO_MESSAGING_SERVICE
       }
 
-      case 'TWILIO_SMS_STUDIO_FLOW': {
+      case 'TWILIO_SMS_WEB_STUDIO_FLOW': {
         // value set in .env takes precedence
-        return context.TWILIO_SMS_STUDIO_FLOW
+        return context.TWILIO_SMS_WEB_STUDIO_FLOW
       }
 
       case 'TWILIO_IVR_STUDIO_FLOW': {
