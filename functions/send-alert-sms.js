@@ -35,11 +35,13 @@ exports.handler = async function (context, event, callback) {
     const patient = listDocuments.find(d => d.sid === run.patientListSid).data.patientList.find(p => p.patientId === event.userId);
     if (patient) {
       let body = '';
-      if (event.properties && event.properties.sentiment === 'NEGATIVE') {
+
+      if (event.event && event.event === 'Survey is negative') {
         body = 'Hi, you have got negative feedback from patient ' + patient.patientFirstName + ' ' + patient.patientLastName;
       }  
+
       if (event.event && event.event === 'Survey completed') { //TODO: use shared name
-        body = 'Hi, patient ' + patient.patientFirstName + ' ' + patient.patientLastName + 'completed survey';
+        body = 'Hi, patient ' + patient.patientFirstName + ' ' + patient.patientLastName + ' completed survey';
       }  
       if(body !== '') {
         const message = await client.messages.create({

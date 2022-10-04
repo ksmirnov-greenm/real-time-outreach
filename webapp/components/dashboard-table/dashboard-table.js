@@ -32,6 +32,7 @@ const DashboardTable = ({ data }) => {
 						<th>Name</th>
 						<th>Outreach Event</th>
 						<th>Results</th>
+						<th>Sentiment</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -46,6 +47,12 @@ const DashboardTable = ({ data }) => {
 							{patient.results.length === 0 && <svg xmlns="http://www.w3.org/2000/svg" width="12" height="2" viewBox="0 0 12 2" fill="none">
 								<path d="M12 0.759943V1.86364H0V0.759943H12Z" fill="#AEB2C1"/>
 							</svg>}
+						</td>
+						<td className={styles.sentiment}>
+						{!patient.sentiment && <span>-</span>}
+						{patient.sentiment === "NEGATIVE" && <span className={styles.negativeSentiment}>{patient.sentiment}</span>}
+						{patient.sentiment === "POSITIVE" && <span className={styles.positiveSentiment}>{patient.sentiment}</span>}
+						{(patient.sentiment === "NEUTRAL" || patient.sentiment === "MIX") && <span>{patient.sentiment}</span>}
 						</td>
 						</tr>)}
 				</tbody>
