@@ -37,7 +37,7 @@ function getStatus(eventsListItems) {
 function getResults(survey, eventsListItems) {
 	const ret = [];
 	//show results only for these
-	if (getStatus(eventsListItems) != 'passed' && getStatus(eventsListItems) != 'partly passed') {
+	if (getStatus(eventsListItems) !== 'passed' && getStatus(eventsListItems) !== 'partly passed') {
 		return ret;
 	}
 	survey.item.map(q => {
@@ -51,7 +51,7 @@ function getResults(survey, eventsListItems) {
 function getSentiment(survey, eventsListItems) {
 	const ret = [];
 	//show results only for these
-	if (getStatus(eventsListItems) != 'passed' && getStatus(eventsListItems) != 'partly passed') {
+	if (getStatus(eventsListItems) !== 'passed' && getStatus(eventsListItems) !== 'partly passed') {
 		return ret;
 	}
 	survey.item.map(q => {
@@ -99,7 +99,7 @@ exports.handler = async function (context, event, callback) {
 				name: patient.patientFirstName + ' ' + patient.patientLastName,
 				status: getStatus(eventsListItems),
 				results: getResults(survey, eventsListItems),
-				sentiment: (eventsListItems.find(item => item.data.event === 'Survey answer' && item.data.properties.question.type == 'text') ?.data ?.properties ?.sentiment)
+				sentiment: (eventsListItems.find(item => item.data.event === 'Survey answer' && item.data.properties.question.type === 'text') ?.data ?.properties ?.sentiment)
 			}
 			dashboardData.patients.push(patientResults);
 

@@ -5,7 +5,14 @@
     flex-direction: column;
     margin-bottom: 32px;
     overflow-y: auto;
-    width: inherit;
+    /*width: inherit;*/
+    width: 926px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .title {
@@ -17,6 +24,28 @@
     font-feature-settings: 'tnum' on, 'lnum' on;
     color: #121C2D;
     margin: 0;
+}
+
+.download-btn {
+    border: none;
+    outline: none;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100px;
+    height: 30px;
+    cursor: pointer;
+}
+.download-btn span {
+    color: #0263E0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    border-bottom: 1px solid #0263E0;
+    height: 15px;
 }
 
 .dashboard-name {
@@ -56,24 +85,29 @@
     border-bottom: 1px solid #E1E3E9;
 }
 .table th:nth-child(1){
-    width: 230px;
+    /*width: 230px;*/
+    width: 250px;
     padding-left: 8px;
 }
 .table td:nth-child(1){
-    width: 230px;
+    /*width: 230px;*/
+    width: 250px;
     color: #121C2D;
     padding-left: 8px;
 }
 .table th:nth-child(2){
-    width: 162px;
+    /*width: 162px;*/
+    width: 170px;
 }
 .table td:nth-child(2){
-    width: 162px;
+    /*width: 162px;*/
+    width: 170px;
     color: #606B85;
 }
 .table th:nth-child(3),
 .table td:nth-child(3){
-    width: 100px;
+    /*width: 100px;*/
+    width: 110px;
 }
 .table th:nth-child(4),
 .table td:nth-child(4){

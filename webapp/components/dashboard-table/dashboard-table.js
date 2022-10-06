@@ -20,11 +20,35 @@ const DashboardTable = ({ data }) => {
 	
 	console.log('selectedResults', selectedPatient);
 	
+	function downloadHandler(){
+		const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+		const downloadAnchorNode = document.createElement('a');
+		downloadAnchorNode.setAttribute("href",     dataStr);
+		downloadAnchorNode.setAttribute("download",  "results.json");
+		document.body.appendChild(downloadAnchorNode); // required for firefox
+		downloadAnchorNode.click();
+		downloadAnchorNode.remove();
+	}
+	
 	
 	return <>
 		<div className={styles.container}>
-			<h1 className={styles.title}>Dashboard</h1>
-			<p className={styles.dashboardName}>{name}</p>
+			<div className={styles.pageHeader}>
+				<h1 className={styles.title}>Dashboard</h1>
+				<p className={styles.dashboardName}>{name}</p>
+				<button className={styles.downloadBtn} onClick={downloadHandler}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+						<path fillRule="evenodd" clipRule="evenodd" d="M1.00016 8.33334C1.36835 8.33334 1.66683 8.63182 1.66683 9.00001V11.6667C1.66683 11.8435 1.73707 12.0131 1.86209 12.1381C1.98712 12.2631 2.15669 12.3333 2.3335 12.3333H11.6668C11.8436 12.3333 12.0132 12.2631 12.1382 12.1381C12.2633 12.0131 12.3335 11.8435 12.3335 11.6667V9.00001C12.3335 8.63182 12.632 8.33334 13.0002 8.33334C13.3684 8.33334 13.6668 8.63182 13.6668 9.00001V11.6667C13.6668 12.1971 13.4561 12.7058 13.081 13.0809C12.706 13.456 12.1973 13.6667 11.6668 13.6667H2.3335C1.80306 13.6667 1.29436 13.456 0.919282 13.0809C0.54421 12.7058 0.333496 12.1971 0.333496 11.6667V9.00001C0.333496 8.63182 0.631973 8.33334 1.00016 8.33334Z" fill="#0263E0"/>
+						<path fillRule="evenodd" clipRule="evenodd" d="M3.19543 5.19527C3.45577 4.93492 3.87788 4.93492 4.13823 5.19527L7.00016 8.0572L9.86209 5.19527C10.1224 4.93492 10.5446 4.93492 10.8049 5.19527C11.0653 5.45562 11.0653 5.87773 10.8049 6.13808L7.47157 9.47141C7.21122 9.73176 6.78911 9.73176 6.52876 9.47141L3.19543 6.13808C2.93508 5.87773 2.93508 5.45562 3.19543 5.19527Z" fill="#0263E0"/>
+						<path fillRule="evenodd" clipRule="evenodd" d="M7.00016 0.333344C7.36835 0.333344 7.66683 0.63182 7.66683 1.00001V9.00001C7.66683 9.3682 7.36835 9.66668 7.00016 9.66668C6.63197 9.66668 6.3335 9.3682 6.3335 9.00001V1.00001C6.3335 0.63182 6.63197 0.333344 7.00016 0.333344Z" fill="#0263E0"/>
+					</svg>
+					<span>Download</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="6" height="5" viewBox="0 0 6 5" fill="none">
+						<path d="M5.49985 1.085C5.40617 0.991876 5.27945 0.939606 5.14735 0.939606C5.01526 0.939606 4.88853 0.991876 4.79485 1.085L2.99985 2.855L1.22985 1.085C1.13617 0.991876 1.00945 0.939606 0.877352 0.939606C0.745259 0.939606 0.618533 0.991876 0.524852 1.085C0.477988 1.13148 0.440791 1.18678 0.415406 1.24771C0.390022 1.30864 0.376953 1.374 0.376953 1.44C0.376953 1.50601 0.390022 1.57136 0.415406 1.63229C0.440791 1.69322 0.477988 1.74852 0.524852 1.795L2.64485 3.915C2.69133 3.96187 2.74663 3.99906 2.80756 4.02445C2.86849 4.04983 2.93385 4.0629 2.99985 4.0629C3.06586 4.0629 3.13121 4.04983 3.19214 4.02445C3.25307 3.99906 3.30837 3.96187 3.35485 3.915L5.49985 1.795C5.54672 1.74852 5.58391 1.69322 5.6093 1.63229C5.63468 1.57136 5.64775 1.50601 5.64775 1.44C5.64775 1.374 5.63468 1.30864 5.6093 1.24771C5.58391 1.18678 5.54672 1.13148 5.49985 1.085Z" fill="#8891AA"/>
+					</svg>
+				</button>
+			</div>
+			
 			
 			<table className={styles.table}>
 				<thead>
