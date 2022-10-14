@@ -18,7 +18,7 @@ exports.handler = async function (context, event, callback) {
 
   const { getParam } = require(Runtime.getFunctions()['helpers'].path);
   const { fetchSyncDocuments, upsertSyncDocument, removeLists } = require(Runtime.getFunctions()['datastore/datastore-helpers'].path);
-  const { triggerSMSWebFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
+  const { triggerSMSWebFlow,triggerSMSFlow, triggerIVRFlow } = require(Runtime.getFunctions()['studio-flow'].path);
   const TWILIO_SYNC_SID = await getParam(context, 'TWILIO_SYNC_SID');
   const TWILIO_MESSAGING_SERVICE = await getParam(context, 'TWILIO_MESSAGING_SERVICE');
   const TWILIO_SCHEDULE_PHONE_NUMBER = await getParam(context, 'TWILIO_SCHEDULE_PHONE_NUMBER');
@@ -87,6 +87,13 @@ exports.handler = async function (context, event, callback) {
       }
       case 'TRIGGER_SMS_WEB': {
         const res = await triggerSMSWebFlow(client, context, event.data);
+        response.setBody({});
+        response.setStatusCode(200);
+        return callback(null, response);
+      }
+
+      case 'TRIGGER_SMS': {
+        const res = await triggerSMSFlow(client, context, event.data, event.survey);
         response.setBody({});
         response.setStatusCode(200);
         return callback(null, response);

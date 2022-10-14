@@ -187,6 +187,11 @@ async function getParam(context, key) {
         return context.TWILIO_IVR_STUDIO_FLOW
       }
 
+      case 'TWILIO_SMS_STUDIO_FLOW': {
+        // value set in .env takes precedence
+        return context.TWILIO_SMS_STUDIO_FLOW
+      }
+
       case 'TWILIO_FROM_PHONE_NUMBER': {
         // value set in .env takes precedence
         return context.TWILIO_FROM_PHONE_NUMBER
@@ -195,6 +200,11 @@ async function getParam(context, key) {
       case 'TWILIO_SCHEDULE_PHONE_NUMBER': {
         // value set in .env takes precedence
         return context.TWILIO_SCHEDULE_PHONE_NUMBER
+      }
+
+      case 'TWILIO_SMS_FLOW_PHONE_NUMBER': {
+        // value set in .env takes precedence
+        return context.TWILIO_SMS_FLOW_PHONE_NUMBER
       }
 
       case 'SEGMENT_ANALYTICS_KEY': {

@@ -4,7 +4,7 @@ import Dialog from "../dialog/dialog";
 import {v4 as uuidV4} from 'uuid';
 
 
-const DashboardTable = ({ data }) => {
+const DashboardTable = ({ data, fhirData }) => {
 	
 	const [showResultsDialog, setShowResultsDialog] = useState(false);
 	const [selectedPatient, setSelectedPatient] = useState(null);
@@ -21,7 +21,7 @@ const DashboardTable = ({ data }) => {
 	console.log('selectedResults', selectedPatient);
 	
 	function downloadHandler(){
-		const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+		const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fhirData));
 		const downloadAnchorNode = document.createElement('a');
 		downloadAnchorNode.setAttribute("href",     dataStr);
 		downloadAnchorNode.setAttribute("download",  "results.json");

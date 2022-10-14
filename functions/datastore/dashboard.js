@@ -97,6 +97,8 @@ exports.handler = async function (context, event, callback) {
 
 			const patientResults = {
 				name: patient.patientFirstName + ' ' + patient.patientLastName,
+				patientId: patient.patientId,
+				surveyId: survey.surveyId,
 				status: getStatus(eventsListItems),
 				results: getResults(survey, eventsListItems),
 				sentiment: (eventsListItems.find(item => item.data.event === 'Survey answer' && item.data.properties.question.type === 'text') ?.data ?.properties ?.sentiment)

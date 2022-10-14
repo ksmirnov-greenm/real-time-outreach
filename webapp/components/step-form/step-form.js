@@ -178,7 +178,7 @@ const StepForm = ({
 					>
 						<option value='sms-web'>SMS invitation and Web flow</option>
 						<option value='ivr'>IVR Flow</option>
-						<option hidden value='sms'>SMS Flow</option>
+						<option value='sms'>SMS Flow</option>
 					</select>
 		
 					<Button

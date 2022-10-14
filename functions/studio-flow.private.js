@@ -23,7 +23,25 @@ async function triggerSMSWebFlow(client, context, run) {
 
 }
 
+async function triggerSMSFlow(client, context, run, survey) {
+  const { getParam } = require(Runtime.getFunctions()['helpers'].path);
+  const TWILIO_SMS_STUDIO_FLOW = await getParam(context, 'TWILIO_SMS_STUDIO_FLOW');
+  const TWILIO_SMS_FLOW_PHONE_NUMBER = await getParam(context, 'TWILIO_SMS_FLOW_PHONE_NUMBER');
+  const ret = await client.studio.flows(TWILIO_SMS_STUDIO_FLOW)
+    .executions
+    .create({
+      to: run.patientPhone,
+      from: TWILIO_SMS_FLOW_PHONE_NUMBER,
+      parameters: {
+        runId: run.runId,
+        //send whole survey to the flow 
+        //(possible issue big size), then survey should be loaded inside flow 
+        survey: survey 
+        }
+    });
+  return ret;
 
+}
 
 async function triggerIVRFlow(client, context, run, survey) {
   const { getParam } = require(Runtime.getFunctions()['helpers'].path);
@@ -38,7 +56,7 @@ async function triggerIVRFlow(client, context, run, survey) {
     parameters: {
       runId: run.runId,
       //send whole survey to the flow 
-      //(possible issue big size), then questions should be requesed in the flow one by one 
+      //(possible issue big size), then survey should be loaded inside flow 
       survey: survey 
     }
   });
@@ -48,5 +66,6 @@ async function triggerIVRFlow(client, context, run, survey) {
 // --------------------------------------------------------------------------------
 module.exports = {
   triggerSMSWebFlow,
+  triggerSMSFlow,
   triggerIVRFlow,
 };

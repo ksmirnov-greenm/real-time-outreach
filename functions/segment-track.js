@@ -102,12 +102,12 @@ exports.handler = async function (context, event, callback) {
               const response = await awsClient.send(command);
               sentiment = response.Sentiment;
             }
-            if (question.type == 'boolean' && outreachMethod == 'ivr') {
+            if (question.type == 'boolean' && (outreachMethod == 'ivr'|| outreachMethod == 'sms') ) {
               //ivr press buttons mapping here
-              if (answer == 1) {
+              if (answer == 1 || String(answer).toLowerCase() == 'yes' ) {
                 answer = true;
               }
-              if (answer == 2) {
+              if (answer == 2 || String(answer).toLowerCase() == 'no' ) {
                 answer = false;
               }
             }
